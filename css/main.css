@@ -1,0 +1,36 @@
+#list-button {
+    float:right;
+}
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;	
+}
+.ui-icon-pathway {
+	background-image: url(images/pathway.gif) !important;
+	background-repeat: no-repeat;
+	background-color: inherit !important;
+}
+	
+.ui-icon-reaction {
+	background-image: url(images/reaction.gif) !important;
+	background-repeat: no-repeat;
+	background-color: inherit !important;
+}
+
+.detailsDiv {
+	border-radius: 15px;
+	padding:15px;
+	text-align:justify;
+	background-color: #FFFFFF;
+	font-family:Fjord;
+	font-size:18px;
+}
+
+.dropdown
+{
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-top: 6px !important;
+	padding: 0;
+}
