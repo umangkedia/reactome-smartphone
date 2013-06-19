@@ -3,7 +3,8 @@ var detailsHeading,inferredFrom,inferredSpecies; //inferredFrom contains dbId an
 
 $(document).bind('ready' , function () 		
 {		
-	$('body').on("click","li .details",function(e) {
+	$('body').on("click",".details",function(e) {
+		console.log("details clicked"+$(this).attr("id"));
 		ajaxCaller(urlFordbId($(this).attr("id")),getSummationId,$("#detailsContent"));	
 		$.mobile.changePage("#detailsPage");
 	});
@@ -75,28 +76,22 @@ createDetails = function (data, selector)
 
 createDropdown = function (data)
 {
-	var select=$("#pathwaySelect");
-	select.empty();
+	$select= $('<select id="pathwaySelect" data-native-menu="false" data-iconpos="notext" data-divider-theme="a">');
+	$("#detailsPage").find("#pathwaySelect").remove();
 	if(data.schemaClass.toUpperCase()==="PATHWAY")
 	{
-		$("#dropdownDiv").show();
-		$.mobile.activePage.find('#open-panel').hide();
-		var optgroup= $('<optgroup label="Sub Pathway"></optgroup>');
-		//select.append('<option data-placeholder="true">Sub Pathway</option>');		
+		var optgroup= $('<optgroup label="Sub Pathway"></optgroup>');		
 		
 		for(var i in data.hasEvent)
 		{
 			console.log(data.hasEvent[i].displayName);
 			optgroup.append('<option value="'+data.hasEvent[i].dbId+'">'+data.hasEvent[i].displayName+'</option>');
 		}
-		select.append(optgroup);
+		$select.append(optgroup);
+		$.mobile.activePage.find('div[data-role="controlgroup"]').controlgroup("container")["append"]($select);		
+		$select.selectmenu();
+		$.mobile.activePage.find('div[data-role="controlgroup"]').controlgroup( "refresh" );
 	}
-	else
-	{
-		$("#dropdownDiv").hide();
-		$.mobile.activePage.find('#open-panel').show();
-	}
-	select.selectmenu('refresh', true);
 }
 
 //for getting inferred data

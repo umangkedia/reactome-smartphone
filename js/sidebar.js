@@ -1,5 +1,5 @@
 var speciesAjax =0,speciesData; //to check whether we have got the species list before
-	
+
 $(document).on('pagebeforeshow', '[data-role="page"]', function()
 {
 	//workaround to include panel on every page
@@ -11,9 +11,8 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
 			'data-position':'right',
 			'data-theme':'a',}).appendTo($(this));
 		
-		fillSidebar($.mobile.activePage.find('#sideBar'));		
-		$.mobile.activePage.find('div[data-role="header"]').prepend('<a href="#" data-role="button" class="ui-btn-right" data-icon="bars" data-iconpos="notext" id="open-panel"></a>');
-		$.mobile.activePage.find('#open-panel').button();
+		fillSidebar($.mobile.activePage.find('#sideBar'));
+		createControlGroup();		
 	}
 	
 	$(document).on('click', '#open-panel', function(){   
@@ -61,4 +60,20 @@ createSidebar = function(data, selector) {
 		list.listview();
 		$.mobile.activePage.find('#sideBar').panel(); //.panel() must be called when something is inserted in panel
 	}		
+}
+
+function createControlGroup() //create dynamic control group on every page
+{
+	//http://jsfiddle.net/androdify/WAzs6/
+	var $ctrlgrp = $("<div/>", {
+		"data-type": "horizontal",
+		"data-role": "controlgroup",
+		"class": "ui-btn-right",
+		"data-mini": "true"
+	});
+	$.mobile.activePage.find('div[data-role="header"]').append($ctrlgrp);
+	$.mobile.activePage.trigger('create');
+	$ctrlgrp.controlgroup("container")["append"]('<a href="#" data-role="button" data-icon="bars" data-iconpos="notext" id="open-panel"></a>');
+	$.mobile.activePage.find('#open-panel').button();
+	$ctrlgrp.controlgroup( "refresh" );
 }

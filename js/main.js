@@ -5,7 +5,6 @@ $(document).bind('pageinit', function()
 	$.mobile.page.prototype.options.addBackBtn = true;
 });
 
-
 $(document).bind('ready' , function () 		
 {	
 	//first call starts here, ajax on page load	
@@ -38,7 +37,9 @@ jsonParser = function (data, ul) {
     for (var i in data) {		
         //create collapsible list
         var collapsible = $('<div data-role="collapsible" data-theme="d" >');
-        collapsible.append('<h2>' + data[i].displayName + '</h2>');
+		var heading= $('<h2>' + data[i].displayName + '</h2>');
+		heading.append("<span style='float:right;' class='button-span'> <a href='#' data-role='button' data-iconpos='notext' data-inline='true' data-icon='grid' class='details' id='"+data[i].dbId+"'>Details</a></span>");
+        collapsible.append(heading);
         var list = $('<ul data-role="listview" data-inset="true" data-split-icon="grid">');
         list.append('<li data-role="list-divider">' + data[i].displayName + '</li>');
 
