@@ -88,7 +88,7 @@ createDropdown = function (data)
 			optgroup.append('<option value="'+data.hasEvent[i].dbId+'">'+data.hasEvent[i].displayName+'</option>');
 		}
 		$select.append(optgroup);
-		$.mobile.activePage.find('div[data-role="controlgroup"]').controlgroup("container")["append"]($select);		
+		$.mobile.activePage.find('div[data-role="controlgroup"]').controlgroup("container")["prepend"]($select);		
 		$select.selectmenu();
 		$.mobile.activePage.find('div[data-role="controlgroup"]').controlgroup( "refresh" );
 	}
