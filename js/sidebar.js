@@ -9,7 +9,8 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
 			'id':'sideBar',
 			'data-role':'panel',
 			'data-position':'right',
-			'data-theme':'a',}).appendTo($(this));
+			'data-display': 'overlay',
+			'data-theme':'c',}).appendTo($(this));
 		
 		fillSidebar($.mobile.activePage.find('#sideBar'));
 		createControlGroup();		
@@ -51,7 +52,7 @@ createSidebar = function(data, selector) {
 	if(typeof data!=="undefined")
 	{
 		selector.empty();
-		var list = $('<ul data-role="listview" data-theme="a" data-inset="false" id="ulSidebar">');	
+		var list = $('<ul data-role="listview" data-theme="c" data-inset="false" id="ulSidebar">');	
 		list.append("<li data-theme='b' style='text-align:center;'>Switch Species</li>");
 		for (var i in data) {
 			list.append("<li id=" + data[i].dbId + " data-icon='false'><a href='#'>" + data[i].displayName + "</a></li>");
