@@ -33,8 +33,8 @@ $(document).bind('ready' , function () {
 		console.log("sidebar clicked"+$(this).text());
 		currentSpecies=$(this).text();
 		$.mobile.activePage.find('#sideBar').panel("close"); 
-		$.mobile.changePage("#frontPage");
 		$('#pathwayList').empty();
+		$.mobile.changePage("#frontPage");		
 		ajaxCaller(frontPageURLFor($(this).text()),jsonParser,$("#pathwayList"));
 	});
 });

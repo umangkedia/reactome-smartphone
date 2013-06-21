@@ -34,23 +34,17 @@ jsonParser = function (data, ul) {
 	schemaType.length=0; //on species change
     $("#heading").text(currentSpecies);
 
+	var topUl= $('<ul data-role="listview" data-inset="true" data-theme="d" data-split-icon="grid">');
+
     for (var i in data) {	
 		
         var icon = getIcon(data[i].schemaClass);
 		var topLi= returnLi(icon, data[i].dbId, data[i].displayName);
-		var list = $('<ul data-role="listview" data-inset="true" data-split-icon="grid">');
-        list.append('<li data-role="list-divider">' + data[i].displayName + '</li>');
-
-        for (var j in data[i].hasEvent) {			
-			var icon = getIcon(data[i].hasEvent[j].schemaClass);
-			var li= returnLi(icon, data[i].hasEvent[j].dbId, data[i].hasEvent[j].displayName);
-			list.append(li);
-            insertSchema(data[i].hasEvent[j].dbId,data[i].hasEvent[j].schemaClass);
-        }
-        topLi.append(list);
-        ul.append(topLi);
+		insertSchema(data[i].dbId,data[i].schemaClass);
+		topUl.append(topLi);
     }
-    ul.listview('refresh');
+	ul.append(topUl);
+    $("#frontPage").trigger('create');
 	ajaxCaller(urlForSpeciesList(),setSpeciesData,null); //prevent concurrent ajax call
 }
 
@@ -78,7 +72,7 @@ nestedListCreate = function (data, list) {
     list.append('<li data-role="list-divider">' + data.displayName + '</li>');
 	
     for (var i in data.hasEvent) {		
-        console.log(data.hasEvent[i].displayName);		
+        console.log(data.hasEvent[i].displayName+" "+data.hasEvent[i].dbId);		
 		var icon = getIcon(data.hasEvent[i].schemaClass);			
 		var li= returnLi(icon, data.hasEvent[i].dbId, data.hasEvent[i].displayName);
 		list.append(li);		
