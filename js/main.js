@@ -34,13 +34,11 @@ jsonParser = function (data, ul) {
 	schemaType.length=0; //on species change
     $("#heading").text(currentSpecies);
 
-    for (var i in data) {		
-        //create collapsible list
-        var collapsible = $('<div data-role="collapsible" data-theme="d" >');
-		var heading= $('<h2>' + data[i].displayName + '</h2>');
-		heading.append("<span style='float:right;' class='button-span'> <a href='#' data-role='button' data-iconpos='notext' data-inline='true' data-icon='grid' class='details' id='"+data[i].dbId+"'>Details</a></span>");
-        collapsible.append(heading);
-        var list = $('<ul data-role="listview" data-inset="true" data-split-icon="grid">');
+    for (var i in data) {	
+		
+        var icon = getIcon(data[i].schemaClass);
+		var topLi= returnLi(icon, data[i].dbId, data[i].displayName);
+		var list = $('<ul data-role="listview" data-inset="true" data-split-icon="grid">');
         list.append('<li data-role="list-divider">' + data[i].displayName + '</li>');
 
         for (var j in data[i].hasEvent) {			
@@ -49,10 +47,10 @@ jsonParser = function (data, ul) {
 			list.append(li);
             insertSchema(data[i].hasEvent[j].dbId,data[i].hasEvent[j].schemaClass);
         }
-        collapsible.append(list);
-        ul.append(collapsible);
+        topLi.append(list);
+        ul.append(topLi);
     }
-    ul.trigger('create');
+    ul.listview('refresh');
 	ajaxCaller(urlForSpeciesList(),setSpeciesData,null); //prevent concurrent ajax call
 }
 
