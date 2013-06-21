@@ -15,6 +15,7 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
 		fillSidebar($.mobile.activePage.find('#sideBar'));
 		createControlGroup();		
 	}
+	else markSidebar();	
 	
 	$(document).on('click', '#open-panel', function(){   
          $.mobile.activePage.find('#sideBar').panel("open");    
@@ -60,6 +61,7 @@ createSidebar = function(data, selector) {
 		selector.append(list);
 		list.listview();
 		$.mobile.activePage.find('#sideBar').panel(); //.panel() must be called when something is inserted in panel
+		markSidebar();
 	}		
 }
 
@@ -77,4 +79,16 @@ function createControlGroup() //create dynamic control group on every page
 	$ctrlgrp.controlgroup("container")["append"]('<a href="#" data-role="button" data-icon="bars" data-iconpos="notext" id="open-panel"></a>');
 	$.mobile.activePage.find('#open-panel').button();
 	$ctrlgrp.controlgroup( "refresh" );
+}
+
+//change theme of selected species in sidebar
+function markSidebar()
+{
+	$("#ulSidebar li").each(function(index)
+	{
+		if($(this).text() == currentSpecies)
+		{
+			$(this).attr('data-theme','b').removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
+		}
+	});
 }
