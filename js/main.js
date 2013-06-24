@@ -1,4 +1,5 @@
 //main js file
+var schemaType = [], currentSpecies="Homo sapiens"; //to store schema type of events
 
 $(document).bind('pageinit', function()
 {	
@@ -26,18 +27,14 @@ $(document).bind('ready' , function ()
 	});
 });
 
-var schemaType = [], currentSpecies="Homo sapiens"; //to store schema type of events
-
 jsonParser = function (data, ul) {
 	
     console.log("jsonParser");
 	schemaType.length=0; //on species change
     $("#heading").text(currentSpecies);
-
 	var topUl= $('<ul data-role="listview" data-inset="true" data-theme="d" data-split-icon="grid">');
 
-    for (var i in data) {	
-		
+    for (var i in data) {			
         var icon = getIcon(data[i].schemaClass);
 		var topLi= returnLi(icon, data[i].dbId, data[i].displayName);
 		insertSchema(data[i].dbId,data[i].schemaClass);
@@ -45,25 +42,29 @@ jsonParser = function (data, ul) {
     }
 	ul.append(topUl);
     $("#frontPage").trigger('create');
-	ajaxCaller(urlForSpeciesList(),setSpeciesData,null); //prevent concurrent ajax call
+	
+	if($.mobile.activePage.attr('id')!= "dialog") //no sidebar in case of dialog box
+	{
+		ajaxCaller(urlForSpeciesList(),setSpeciesData,null); //prevent concurrent ajax call
+	}
 }
 
 ajaxCaller = function (url, callback, selector) {
 	
     $.ajax({
-            type: 'GET',
-            async: true,
-            beforeSend: ajaxStart,
-            url: url,
-            dataType: 'json',
-            success: function (data) {
-                callback(data, selector);
-            },
-            complete: ajaxStop,
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log("error :" + XMLHttpRequest.responseText);
-            }
-        });
+		type: 'GET',
+		async: true,
+		beforeSend: ajaxStart,
+		url: url,
+		dataType: 'json',
+		success: function (data) {
+			ajaxStop();
+			callback(data, selector);
+		},
+		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			console.log("error :" + XMLHttpRequest.responseText);
+		}
+	});
 }
 
 //for creating nested list
@@ -72,7 +73,7 @@ nestedListCreate = function (data, list) {
     list.append('<li data-role="list-divider">' + data.displayName + '</li>');
 	
     for (var i in data.hasEvent) {		
-        console.log(data.hasEvent[i].displayName+" "+data.hasEvent[i].dbId);		
+        //console.log(data.hasEvent[i].displayName+" "+data.hasEvent[i].dbId);		
 		var icon = getIcon(data.hasEvent[i].schemaClass);			
 		var li= returnLi(icon, data.hasEvent[i].dbId, data.hasEvent[i].displayName);
 		list.append(li);		
@@ -117,18 +118,18 @@ function getIcon(schemaClass) //get icon based on schemaclass
 }
 
 function ajaxStart() {
-	var interval = setInterval(function () {
-		    $.mobile.loading('show', {
-                    text: "Fetching data...",
-                    textVisible: true
-                });
-            clearInterval(interval);
-        }, 1);
+    var interval = setInterval(function () {
+        $.mobile.loading('show', {
+            text: "Fetching data...",
+            textVisible: true
+        });
+        clearInterval(interval);
+    }, 1);
 }
 
 function ajaxStop() {
-	var interval = setInterval(function () {
-		    $.mobile.loading('hide');
-            clearInterval(interval);
-        }, 1);
+    var interval = setInterval(function () {
+        $.mobile.loading('hide');
+        clearInterval(interval);
+    }, 1);
 }

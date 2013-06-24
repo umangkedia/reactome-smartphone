@@ -34,8 +34,12 @@ $(document).bind('ready' , function () {
 		currentSpecies=$(this).text();
 		$.mobile.activePage.find('#sideBar').panel("close"); 
 		$('#pathwayList').empty();
-		$.mobile.changePage("#frontPage");		
-		ajaxCaller(frontPageURLFor($(this).text()),jsonParser,$("#pathwayList"));
+		if(!onDetails) //if user is not on details page
+		{
+			$.mobile.changePage("#frontPage");	
+			ajaxCaller(frontPageURLFor(currentSpecies),jsonParser,$("#pathwayList"));
+		}
+		else checkOrthologousEvent(); //function is in orthologus.js 		
 	});
 });
 
@@ -71,8 +75,7 @@ function createControlGroup() //create dynamic control group on every page
 	var $ctrlgrp = $("<div/>", {
 		"data-type": "horizontal",
 		"data-role": "controlgroup",
-		"class": "ui-btn-right",
-		"data-mini": "true"
+		"class": "ui-btn-right"
 	});
 	$.mobile.activePage.find('div[data-role="header"]').append($ctrlgrp);
 	$.mobile.activePage.trigger('create');
@@ -84,11 +87,12 @@ function createControlGroup() //create dynamic control group on every page
 //change theme of selected species in sidebar
 function markSidebar()
 {
-	$("#ulSidebar li").each(function(index)
+	$("#ulSidebar li").not(':first-child').each(function(index) //first child is switch species
 	{
 		if($(this).text() == currentSpecies)
 		{
 			$(this).attr('data-theme','b').removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
 		}
+		else $(this).attr('data-theme','c').removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
 	});
 }

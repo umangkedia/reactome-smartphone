@@ -1,5 +1,6 @@
 //js for details page
-var detailsHeading,inferredFrom,inferredSpecies; //inferredFrom contains dbId and InferredSpecies contains speciesname
+var detailsHeading, inferredFrom, inferredSpecies; //inferredFrom contains dbId and InferredSpecies contains speciesname
+var onDetails, detailsData; //onDetails: whether user is on details page.. for orthologous events,detailsData will store JSON in getsummationID
 
 $(document).bind('ready' , function () 		
 {		
@@ -11,11 +12,26 @@ $(document).bind('ready' , function ()
 	
 	$('body').on("change","#pathwaySelect",function(e) {
 		ajaxCaller(urlFordbId($("#pathwaySelect option:selected").val()),getSummationId,$("#detailsContent"));
-		if($.mobile.activePage.attr('id')!="detailsPage")$.mobile.changePage("#detailsPage");				
+		if($.mobile.activePage.attr('id')!="detailsPage") $.mobile.changePage("#detailsPage");				
 	});
 	
 	$('#inferredDiv').bind('expand', function () { //delegating inferred data
 		if($("#inferred").is(':empty')) ajaxCaller(urlFordbId(inferredFrom),getInferred,$("#inferred"));
+	});
+	
+	$("#detailsPage").on("pagehide",function(event,ui) {
+		onDetails=false;
+	});
+	
+	$("#detailsPage").on("pageshow",function(event,ui) {
+		onDetails=true;
+		//adding back button dynamically, because we need up button in case of orthologous event
+		if($("#detailsPage").find("#detailsBack").length===0)
+		{
+			$("#goUp").remove();
+			$('<a href="#frontPage" id="detailsBack" data-rel="back" data-icon="arrow-l" class="ui-btn-left">Back</a>').appendTo('#detailsHeader');
+			$("#detailsBack").button();
+		}
 	});
 });
 
@@ -25,6 +41,8 @@ getSummationId =function (data,selector)
 	$("#detailsCollapsible").children().trigger( "collapse" );
 	$("#stableId, #author, #review, #inferred").empty();
 	createDropdown(data);
+	
+	detailsData=data;//store json for orthologous event
 	console.log("details page"+data.dbId);
 	
 	if (JSON.stringify(data.isInferred) == "true") //was returning a json object
@@ -64,6 +82,7 @@ getSummationId =function (data,selector)
 		ajaxCaller(urlFordbId(data.summation[0].dbId), createDetails, selector);
 	} catch (err) {
 		$("#detailsDiv").text("Summary not available");
+		redrawFrontPage();
 	}
 }
 
@@ -71,7 +90,10 @@ createDetails = function (data, selector)
 {
 	$("#detailsHeading").text(detailsHeading);
 	$("#detailsDiv").empty();
+	$("#detailsDiv").append("<b>Species Name: </b>"+currentSpecies+"<br/><br/>");
 	$("#detailsDiv").append($.parseHTML(data.text));
+	
+	redrawFrontPage(); // this is to check whether to redraw frontpage. If it is orthologous event, the front page is drawn
 }
 
 createDropdown = function (data)
@@ -80,18 +102,19 @@ createDropdown = function (data)
 	$("#detailsPage").find("#pathwaySelect").remove();
 	if(data.schemaClass.toUpperCase()==="PATHWAY")
 	{
-		var optgroup= $('<optgroup label="Sub Pathway"></optgroup>');		
+		var optgroup= $('<optgroup label="Sub Pathway">');
+		optgroup.append("<option></option>"); //blank option so that first option is not selected
 		
 		for(var i in data.hasEvent)
 		{
-			console.log(data.hasEvent[i].displayName);
+			//console.log(data.hasEvent[i].displayName);
 			optgroup.append('<option value="'+data.hasEvent[i].dbId+'">'+data.hasEvent[i].displayName+'</option>');
 		}
 		$select.append(optgroup);
 		$.mobile.activePage.find('div[data-role="controlgroup"]').controlgroup("container")["prepend"]($select);		
-		$select.selectmenu();
-		$.mobile.activePage.find('div[data-role="controlgroup"]').controlgroup( "refresh" );
+		$select.selectmenu();		
 	}
+	$.mobile.activePage.find('div[data-role="controlgroup"]').controlgroup( "refresh" ); 
 }
 
 //for getting inferred data

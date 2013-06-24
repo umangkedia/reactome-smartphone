@@ -10,6 +10,7 @@
 	<script src="js/url.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/details.js"></script>
+	<script src="js/orthologous.js"></script>
 	<script src="js/sidebar.js"></script>
 </head> 
 
@@ -22,8 +23,8 @@
 		</div>
 	</div>
 	
-	<div data-role="page" data-add-back-btn="true" id="detailsPage">
-		<div data-role="header" data-theme="b">
+	<div data-role="page" id="detailsPage" data-add-back-btn="false">
+		<div data-role="header" data-theme="b" id="detailsHeader">			
 			<h3 id="detailsHeading">Reactome</h3>
 		</div>
 		<div data-role="content" id="detailsContent" data-inset="true">
@@ -35,6 +36,17 @@
 				<div data-role="collapsible"> <h2>Reviewed</h2><div id="review" data-role="content"></div></div>	
 			</div>
 		</div>	
+	</div>
+	
+	
+	<div data-role="page" id="dialog" data-theme="c" data-close-btn="none" data-add-back-btn="false">
+		<div data-role="header" data-theme="b">
+			<h1>Error</h1>
+		</div>
+		<div data-role="content">
+			<div id="msg"></div>
+			<a href="#frontPage" data-role="button">OK</a>
+		</div>
 	</div>
 	
 </body>
