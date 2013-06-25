@@ -25,29 +25,9 @@ function compareEvent(data,selector)
 		{
 			postData+=","+data.orthologousEvent[i].dbId;
 		}
-		ajaxPOSTCaller(checkOrthologousSpecies, selector, postData);
+		ajaxPOSTCaller(urlForQueryByIds(),checkOrthologousSpecies, selector, postData);
 	}
 	else ajaxCaller(frontPageURLFor(currentSpecies),jsonParser,$("#pathwayList"));		
-}
-
-//for POST request only
-function  ajaxPOSTCaller (callback, selector, postData) {
-	
-    $.ajax({
-		type: 'POST',
-		beforeSend: ajaxStart,
-		url: "http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/queryByIds/Pathway",
-		data: postData,
-		contentType: "application/json",
-		dataType: 'json',
-		success: function (data) {
-			ajaxStop();
-			callback(data, selector);
-		},
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			console.log("error :" + XMLHttpRequest.responseText);
-		}
-	});
 }
 
 function checkOrthologousSpecies(data, selector)

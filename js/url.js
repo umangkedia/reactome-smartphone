@@ -15,3 +15,8 @@ function urlFordbId(dbId) //sub pathways based on dbID
 {
 	return baseURL+"queryById/Pathway/"+dbId;
 }
+
+function urlForQueryByIds() //sub pathways based on dbID
+{
+	return baseURL+"queryByIds/Pathway/";
+}

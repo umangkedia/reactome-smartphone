@@ -23,7 +23,8 @@ $(document).bind('ready' , function ()
 			$(this).closest('li').append(list);
 			$(this).closest('ul').listview('refresh');			
 			ajaxCaller(url,nestedListCreate,list);		
-		}		
+		}
+		else createPopup(dbId);
 	});
 });
 
@@ -115,6 +116,48 @@ function getIcon(schemaClass) //get icon based on schemaclass
 	else if(schemaClass.toUpperCase() == 'BLACKBOXEVENT') return 'blackbox';
 	
 	return 'reaction';
+}
+
+function createPopup(position)
+{
+	var $popUp = $("<div/>",{
+		'data-role':'popup',
+        'data-transition' : "flow",
+		'data-position-to': "window",
+		'data-theme':'e',
+		'data-overlay-theme':"a",
+    }).bind("popupafterclose", function() {
+		console.log("popup close");
+        $(this).remove();
+    });
+	
+	$("<p/>", {
+        text : "This is a reaction event and contains no further pathways"
+    }).appendTo($popUp);
+
+	$.mobile.activePage.append($popUp);
+	$popUp.popup();
+	$popUp.popup("open");
+}
+
+//for POST request only
+function  ajaxPOSTCaller (url,callback, selector, postData) {
+	
+    $.ajax({
+		type: 'POST',
+		beforeSend: ajaxStart,
+		url: url,
+		data: postData,
+		contentType: "application/json",
+		dataType: 'json',
+		success: function (data) {
+			ajaxStop();
+			callback(data, selector);
+		},
+		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			console.log("error :" + XMLHttpRequest.responseText);
+		}
+	});
 }
 
 function ajaxStart() {

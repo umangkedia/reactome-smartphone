@@ -15,8 +15,9 @@ $(document).bind('ready' , function ()
 		if($.mobile.activePage.attr('id')!="detailsPage") $.mobile.changePage("#detailsPage");				
 	});
 	
-	$('#inferredDiv').bind('expand', function () { //delegating inferred data
-		if($("#inferred").is(':empty')) ajaxCaller(urlFordbId(inferredFrom),getInferred,$("#inferred"));
+	$('#inferredDiv, #referenceDiv').bind('expand', function () { //delegating inferred data
+		if(this.id=='inferredDiv' && $("#inferred").is(':empty')) ajaxCaller(urlFordbId(inferredFrom),getInferred,$("#inferred"));
+		else if(this.id=='referenceDiv' && $("#reference").is(':empty')) getReference();
 	});
 	
 	$("#detailsPage").on("pagehide",function(event,ui) {
@@ -39,7 +40,7 @@ getSummationId =function (data,selector)
 {
 	detailsHeading=data.displayName;
 	$("#detailsCollapsible").children().trigger( "collapse" );
-	$("#stableId, #author, #review, #inferred").empty();
+	$("#author, #review, #inferred, #reference").empty();
 	createDropdown(data);
 	
 	detailsData=data;//store json for orthologous event
@@ -52,29 +53,28 @@ getSummationId =function (data,selector)
 	} 
 	else $("#inferredDiv").hide();
 
-	try {
-		$("#stableId").text(data.stableIdentifier.displayName);
-	} catch (err) {
-		$("#stableId").text("Content not available");
-	}
-
-	try {
+	if(typeof(data.authored) != "undefined")
+	{
+		$("#authorDiv").show();
 		var ul = $('<ul data-role="listview" data-inset="true">');
 		for (var i in data.authored)
 			ul.append("<li>" + data.authored[0].displayName + "</li>");		
 		$("#author").append(ul).trigger('create');
-	} catch (err) {
-		$("#author").text("Content not available");
-	}	
-
-	try {
+	}
+	else $("#authorDiv").hide();	
+	
+	if(typeof(data.authored) != "undefined")
+	{
+		$("#reviewDiv").show();
 		var ul = $('<ul data-role="listview" data-inset="true">');
 		for (var i in data.reviewed)
 			ul.append("<li>" + data.reviewed[0].displayName + "</li>");
 		$("#review").append(ul).trigger('create');
-	} catch (err) {
-		$("#review").text("Content not available");
-	}	
+	}
+	else $("#reviewDiv").hide();
+	
+	if(typeof(data.literatureReference)!= "undefined") $("#referenceDiv").show();
+	else $("#referenceDiv").hide();
 	
 	$("#detailsCollapsible").collapsibleset('refresh');
 
@@ -105,9 +105,7 @@ createDropdown = function (data)
 		var optgroup= $('<optgroup label="Sub Pathway">');
 		optgroup.append("<option></option>"); //blank option so that first option is not selected
 		
-		for(var i in data.hasEvent)
-		{
-			//console.log(data.hasEvent[i].displayName);
+		for(var i in data.hasEvent) {
 			optgroup.append('<option value="'+data.hasEvent[i].dbId+'">'+data.hasEvent[i].displayName+'</option>');
 		}
 		$select.append(optgroup);
@@ -118,7 +116,6 @@ createDropdown = function (data)
 }
 
 //for getting inferred data
-
 getInferred = function (data,selector)
 {
 	inferredSpecies= data.species[0].displayName;
@@ -128,6 +125,41 @@ getInferred = function (data,selector)
 createInferred = function (data,selector)
 {
 	selector.append("<p><b>"+inferredSpecies+":</b> "+data.text+"</p>");
+}
+
+getReference = function()
+{
+	data=detailsData;
+	var postData= "ID=";	
+			
+	for(var i in data.literatureReference)
+	{
+		if(i>0)postData+=",";
+		postData+=data.literatureReference[i].dbId;
+	}
+	ajaxPOSTCaller(urlForQueryByIds(),createReference, "#reference", postData);	
+}
+
+function createReference(data, selector)
+{
+	var ul = $('<ul data-role="listview" data-inset="true">');
+	for(var i in data)
+	{
+		var text= "";
+		for(var j in data[i].author) 
+		{
+			if(j>0) text+=",";
+			text+=data[i].author[j].displayName;
+		}
+		$content1=$("<h5><strong>"+text+"</strong></h5>");
+		$content2=("<p style='white-space:normal;'>"+data[i].displayName+"</p>");
+		var anchor= $("<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+data[i].pubMedIdentifier+"?dopt=Abstract' target='_blank'>").append($content1)
+																																.append($content2);
+		var li= $("<li>").append(anchor);
+		ul.append(li);
+	}
+			
+	$(selector).append(ul).trigger('create');	
 }
 	
 
