@@ -132,7 +132,7 @@ function createPopup(position)
     });
 	
 	$("<p/>", {
-        text : "This is a reaction event and contains no further pathways"
+        text : "This is a reaction event and does not contain further pathways"
     }).appendTo($popUp);
 
 	$.mobile.activePage.append($popUp);
