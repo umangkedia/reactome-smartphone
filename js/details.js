@@ -142,7 +142,7 @@ getReference = function()
 
 function createReference(data, selector)
 {
-	var ul = $('<ul data-role="listview" data-inset="true">');
+	var ul = $('<ol data-role="listview" data-inset="true">');
 	for(var i in data)
 	{
 		var text= "";
@@ -152,10 +152,10 @@ function createReference(data, selector)
 			text+=data[i].author[j].displayName;
 		}
 		$content1=$("<h5><strong>"+text+"</strong></h5>");
-		$content2=("<p style='white-space:normal;'>"+data[i].displayName+"</p>");
+		$content2=("<p style='white-space:normal;text-indent: 0;'>"+data[i].displayName+"</p>");
 		var anchor= $("<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+data[i].pubMedIdentifier+"?dopt=Abstract' target='_blank'>").append($content1)
 																																.append($content2);
-		var li= $("<li>").append(anchor);
+		var li= $("<li data-icon='false'>").append(anchor);
 		ul.append(li);
 	}
 			
