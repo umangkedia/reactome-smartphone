@@ -5,7 +5,6 @@ var onDetails, detailsData; //onDetails: whether user is on details page.. for o
 $(document).bind('ready' , function () 		
 {		
 	$('body').on("click",".details",function(e) {
-		console.log("details clicked"+$(this).attr("id"));
 		ajaxCaller(urlFordbId($(this).attr("id")),getSummationId,$("#detailsContent"));	
 		$.mobile.changePage("#detailsPage");
 	});
@@ -89,9 +88,9 @@ getSummationId =function (data,selector)
 createDetails = function (data, selector)
 {
 	$("#detailsHeading").text(detailsHeading);
-	$("#detailsDiv").empty();
-	$("#detailsDiv").append("<b>Species Name: </b>"+currentSpecies+"<br/><br/>");
-	$("#detailsDiv").append($.parseHTML(data.text));
+	$("#detailsDiv").empty()
+		.append("<b>Species Name: </b>"+currentSpecies+"<br/><br/>")
+		.append($.parseHTML(data.text));
 	
 	redrawFrontPage(); // this is to check whether to redraw frontpage. If it is orthologous event, the front page is drawn
 }
@@ -151,10 +150,10 @@ function createReference(data, selector)
 			if(j>0) text+=",";
 			text+=data[i].author[j].displayName;
 		}
-		$content1=$("<h5><strong>"+text+"</strong></h5>");
-		$content2=("<p style='white-space:normal;text-indent: 0;'>"+data[i].displayName+"</p>");
+		$content1=$("<h5>"+text+"</h5>");
+		$content2=$("<p style='white-space:normal;text-indent: 0;'>"+data[i].displayName+"</p>");
 		var anchor= $("<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+data[i].pubMedIdentifier+"?dopt=Abstract' target='_blank'>").append($content1)
-																																.append($content2);
+																																 .append($content2);
 		var li= $("<li data-icon='false'>").append(anchor);
 		ul.append(li);
 	}

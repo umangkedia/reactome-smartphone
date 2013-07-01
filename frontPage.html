@@ -5,8 +5,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	<link rel="stylesheet" href="css/jquery.mobile-1.3.1.min.css" />
 	<link rel="stylesheet" href="css/main.css" />
+	
 	<script src="js/jquery-1.9.1.min.js"></script>
-	<script src="js/jquery.mobile-1.3.1.min.js"></script>
+	<script src="js/jquery.mobile-1.3.1.min.js"></script>	
+	<script src="js/search.js"></script>
 	<script src="js/url.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/details.js"></script>
@@ -17,6 +19,7 @@
 <body>
 	<div data-role="page" data-add-back-btn="true" id="frontPage">
 		<div data-role="header" data-theme="b">
+			<a href="#searchPage" data-role="button" data-icon="search" data-iconpos="notext"></a>
 			<h3 id="heading">Reactome</h3>
 		</div>
 		<div data-role="content" id="pathwayList" >		
@@ -47,6 +50,41 @@
 		<div data-role="content">
 			<div id="msg"></div>
 			<a href="#frontPage" data-role="button">OK</a>
+		</div>
+	</div>
+	
+	<div data-role="page" id="error" data-theme="c" data-close-btn="none" data-add-back-btn="false">
+		<div data-role="header" data-theme="b">
+			<h1>Unable to retrieve content</h1>
+		</div>
+		<div data-role="content">
+			<div> There was some problem while fetching the content. Click the button below to refresh the page.</div>
+			<a href="#frontPage" data-role="button" id="errorRefresh">Refresh</a>
+		</div>
+	</div>
+	
+	
+	<div data-role="page" id="searchPage" data-add-back-btn="true">
+		<div data-role="header" data-theme="b">
+			<h1>Search</h1>
+		</div>
+		<div data-role="content">
+			<table style="width:100%;"><tbody><tr><td>
+				<input type="search" id="search" value="" placeholder="Search"  data-mini="true" > </td>
+				<td style='width:3em;'><a href="#" id="go" data-role="button" data-inline="true" data-mini="true"> Go </a></td></tr>
+				</tbody>
+			</table>
+			
+			<fieldset data-role="controlgroup" id="searchGroup" data-type="horizontal">
+				<select id="searchSpeciesList" data-native-menu="false" data-inline="true" data-mini="true">
+						<option value="null">Choose species</option>
+						<option value="null">All</option>
+				</select>
+				<label><input type="checkbox" id="geneSearch" data-inline="true" data-mini="true" >Search gene symbols</label>
+			</fieldset>
+			
+			<h4 id="searchText" style="display:none;"> Search results:</h4>
+			<ul data-role="listview" data-inset="true" id="searchList" data-theme="d"></ul> 
 		</div>
 	</div>
 	

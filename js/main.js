@@ -1,20 +1,19 @@
 //main js file
 var schemaType = [], currentSpecies="Homo sapiens"; //to store schema type of events
 
-$(document).bind('pageinit', function()
+$(document).on('pageinit', function()
 {	
 	$.mobile.page.prototype.options.addBackBtn = true;
 });
 
-$(document).bind('ready' , function () 		
+$(document).ready(function () 		
 {	
 	//first call starts here, ajax on page load	
 	ajaxCaller(frontPageURLFor("homo sapiens"),jsonParser,$("#pathwayList"));
 	
 	//nested list event when clicked on li's anchor tag
 	$('body').on("click","li .expand",function(e) {
-		console.log("List click event"+$(this).text()+$(this).attr("id"));
-		var dbId = $(this).attr("id");
+		var dbId = this.id;
 		var url = urlFordbId(dbId);
 		
 		if(checkSchema($(this).attr("id"))) //only 'schemaclass = pathway' will expand
@@ -26,6 +25,12 @@ $(document).bind('ready' , function ()
 		}
 		else createPopup(dbId);
 	});
+	
+	//error handling test
+	$('#errorRefresh').on("click", function(e) {
+		ajaxCaller(frontPageURLFor("homo sapiens"),jsonParser,$("#pathwayList"));
+	});
+	
 });
 
 jsonParser = function (data, ul) {
@@ -54,7 +59,6 @@ ajaxCaller = function (url, callback, selector) {
 	
     $.ajax({
 		type: 'GET',
-		async: true,
 		beforeSend: ajaxStart,
 		url: url,
 		dataType: 'json',
@@ -64,6 +68,9 @@ ajaxCaller = function (url, callback, selector) {
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log("error :" + XMLHttpRequest.responseText);
+			$.mobile.changePage("#error", {
+				role: "dialog"
+			});
 		}
 	});
 }
@@ -73,8 +80,7 @@ nestedListCreate = function (data, list) {
     
     list.append('<li data-role="list-divider">' + data.displayName + '</li>');
 	
-    for (var i in data.hasEvent) {		
-        //console.log(data.hasEvent[i].displayName+" "+data.hasEvent[i].dbId);		
+    for (var i in data.hasEvent) {			
 		var icon = getIcon(data.hasEvent[i].schemaClass);			
 		var li= returnLi(icon, data.hasEvent[i].dbId, data.hasEvent[i].displayName);
 		list.append(li);		
@@ -127,7 +133,6 @@ function createPopup(position)
 		'data-theme':'e',
 		'data-overlay-theme':"a",
     }).bind("popupafterclose", function() {
-		console.log("popup close");
         $(this).remove();
     });
 	
@@ -136,8 +141,8 @@ function createPopup(position)
     }).appendTo($popUp);
 
 	$.mobile.activePage.append($popUp);
-	$popUp.popup();
-	$popUp.popup("open");
+	$popUp.popup()
+		.popup("open");
 }
 
 //for POST request only

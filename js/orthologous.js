@@ -34,6 +34,7 @@ function checkOrthologousSpecies(data, selector)
 {
 	redraw=true;
 	var flag=false;
+	console.log(data);
 	for(var i in data)
 	{
 		if(data[i].species[0].displayName.toUpperCase()===currentSpecies.toUpperCase())
@@ -55,8 +56,8 @@ function checkOrthologousSpecies(data, selector)
 	{		
 		redrawFrontPage();
 		ajaxStop();
-		$("#msg").empty();
-		$("#msg").append("<b>"+detailsData.displayName+"</b> event is not present in <b>"+ currentSpecies+"</b>. Click OK to go to homepage");
+		$("#msg").empty()
+			.append("<b>"+detailsData.displayName+"</b> event is not present in <b>"+ currentSpecies+"</b>. Click OK to go to homepage");
 		$.mobile.changePage("#dialog", {
 			role: "dialog"
 		});

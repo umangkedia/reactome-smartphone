@@ -20,3 +20,15 @@ function urlForQueryByIds() //sub pathways based on dbID
 {
 	return baseURL+"queryByIds/Pathway/";
 }
+
+function urlListByName(key, species)
+{
+	key=key.toLowerCase().replace(/\s/g,"+");
+	species=species.toLowerCase().replace(/\s/g,"+");
+	return baseURL+"listByName/Event/"+key+"/"+species;
+}
+
+function urlQueryHitPathways()
+{
+	return baseURL+"queryHitPathways";
+}
