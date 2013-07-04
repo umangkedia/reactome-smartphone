@@ -1,3 +1,5 @@
+var searchEvent=true;//event search or gene search
+	
 $(document).on('pageinit','#searchPage',function() {	
 	
 	$("#go").on('click', function()
@@ -5,21 +7,35 @@ $(document).on('pageinit','#searchPage',function() {
 		if($.trim($("#search").val())!="")
 		{
 			var postData=$.trim($("#search").val());
-			if($("#geneSearch").is(':checked'))	{			
+			if(!searchEvent) {	
+				console.log("gene search");
 				ajaxPOSTCaller(urlQueryHitPathways(),createSearchResult, $("#searchList"), postData);
 			}
 			else {
+				console.log("event search");
 				var speciesName=$("#searchSpeciesList option:selected").val();
 				ajaxCaller(urlListByName(postData,speciesName),createSearchResult,$("#searchList"));
 			}
 		}
 	});	
 	
-	$("#geneSearch").on('change', function ()
+	$("#geneSearch").on('click', function ()
 	{
-		if(this.checked) $("#searchSpeciesList").closest('.ui-select').hide();
-		else $("#searchSpeciesList").closest('.ui-select').show();		
-		$("#searchGroup").controlgroup('refresh');
+		searchEvent=false;
+		$("#search").val('');
+		$("#eventSearch").removeClass('ui-btn-active ui-state-persist');
+		$(this).addClass('ui-btn-active ui-state-persist');
+		$("#search").attr('placeholder','Search gene symbols...');
+		$("#searchSpeciesList").closest('.ui-select').fadeOut();
+	});
+	
+	$("#eventSearch").on('click', function ()
+	{
+		searchEvent=true;
+		$("#geneSearch").removeClass('ui-btn-active ui-state-persist');
+		$(this).addClass('ui-btn-active ui-state-persist');
+		$("#search").attr('placeholder','Search by Event Name...');
+		$("#searchSpeciesList").closest('.ui-select').fadeIn();
 	});
 	
 	if(typeof speciesData !=='undefined') setSpeciesSelect(speciesData,$('#searchSpeciesList'));
@@ -47,12 +63,14 @@ function createSearchResult(data,selector)
 	}
 	else
 	{
-		$("#searchText").text(data.length+" results found");
+		$("#searchText").text(data.length+" results found for "+ $.trim($('#search').val()));
 		for(var i in data)
 		{
-			var heading = $("<h5 style='white-space:normal !important;'>"+data[i].displayName+"</h5>");
-			var event = $("<p> Event type: "+data[i].schemaClass+"</p>");
-			var li = $("<li>").append(heading).append(event);
+			var li = $('<li data-icon="false">');
+			var anchor=$('<a href="#" class="details" id="' + data[i].dbId + '" >');
+			var icon = getIcon(data[i].schemaClass);
+			anchor.append('<img src="css/images/'+icon+'.gif" class="ui-li-icon ui-corner-none">'+ data[i].displayName);
+			li.append(anchor);
 			selector.append(li);		
 		}
 	}	

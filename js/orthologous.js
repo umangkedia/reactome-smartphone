@@ -3,9 +3,7 @@ var redraw=false; //this is to check whether to redraw frontpage. If it is ortho
 function checkOrthologousEvent()
 {	
 	var data= detailsData;
-	if(data.species[0].displayName.toUpperCase()==="HOMO SAPIENS")
-	{
-		console.log("species is homo sapiens");
+	if(data.species[0].displayName.toUpperCase()==="HOMO SAPIENS") {
 		compareEvent(data, $("#detailsContent")); //if species is human we need not make additional REST call
 	}
 	else
@@ -34,7 +32,6 @@ function checkOrthologousSpecies(data, selector)
 {
 	redraw=true;
 	var flag=false;
-	console.log(data);
 	for(var i in data)
 	{
 		if(data[i].species[0].displayName.toUpperCase()===currentSpecies.toUpperCase())

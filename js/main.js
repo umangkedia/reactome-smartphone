@@ -1,29 +1,31 @@
 //main js file
 var schemaType = [], currentSpecies="Homo sapiens"; //to store schema type of events
 
-$(document).on('pageinit', function()
+$(document).on('pageinit', '#frontPage', function () 		
 {	
 	$.mobile.page.prototype.options.addBackBtn = true;
-});
-
-$(document).ready(function () 		
-{	
+	
 	//first call starts here, ajax on page load	
 	ajaxCaller(frontPageURLFor("homo sapiens"),jsonParser,$("#pathwayList"));
 	
-	//nested list event when clicked on li's anchor tag
 	$('body').on("click","li .expand",function(e) {
 		var dbId = this.id;
 		var url = urlFordbId(dbId);
 		
 		if(checkSchema($(this).attr("id"))) //only 'schemaclass = pathway' will expand
 		{		
-			var list=$('<ul data-inset="true" data-split-icon="grid">'); //creating ul before because jquery mobile ajax is getting completed before our ajax
+			var list=$('<ul data-inset="true" data-split-icon="info" data-split-theme="c">'); //creating ul before because jquery mobile ajax is getting completed before our ajax
 			$(this).closest('li').append(list);
 			$(this).closest('ul').listview('refresh');			
 			ajaxCaller(url,nestedListCreate,list);		
 		}
 		else createPopup(dbId);
+	});
+	
+	//detail button
+	$('body').on("click",".details",function(e) {
+		ajaxCaller(urlFordbId($(this).attr("id")),getSummationId,$("#detailsContent"));	
+		$.mobile.changePage("#detailsPage");		
 	});
 	
 	//error handling test
@@ -38,7 +40,7 @@ jsonParser = function (data, ul) {
     console.log("jsonParser");
 	schemaType.length=0; //on species change
     $("#heading").text(currentSpecies);
-	var topUl= $('<ul data-role="listview" data-inset="true" data-theme="d" data-split-icon="grid">');
+	var topUl= $('<ul data-role="listview" data-inset="true" data-theme="d" data-split-icon="info" data-split-theme="c">');
 
     for (var i in data) {			
         var icon = getIcon(data[i].schemaClass);
@@ -132,7 +134,7 @@ function createPopup(position)
 		'data-position-to': "window",
 		'data-theme':'e',
 		'data-overlay-theme':"a",
-    }).bind("popupafterclose", function() {
+    }).on("popupafterclose", function() {
         $(this).remove();
     });
 	
@@ -141,8 +143,7 @@ function createPopup(position)
     }).appendTo($popUp);
 
 	$.mobile.activePage.append($popUp);
-	$popUp.popup()
-		.popup("open");
+	$popUp.popup().popup("open");
 }
 
 //for POST request only

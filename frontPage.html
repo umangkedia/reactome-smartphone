@@ -18,8 +18,7 @@
 
 <body>
 	<div data-role="page" data-add-back-btn="true" id="frontPage">
-		<div data-role="header" data-theme="b">
-			<a href="#searchPage" data-role="button" data-icon="search" data-iconpos="notext"></a>
+		<div data-role="header" data-theme="b">			
 			<h3 id="heading">Reactome</h3>
 		</div>
 		<div data-role="content" id="pathwayList" >		
@@ -37,7 +36,7 @@
 				<div data-role="collapsible" id="inferredDiv"><h2>Inferred From</h2><div id="inferred" data-role="content" style="text-align:justify;"></div></div>
 				<div data-role="collapsible" id="authorDiv"><h2>Authored</h2><div id="author" data-role="content"></div></div>	
 				<div data-role="collapsible" id="reviewDiv"><h2>Reviewed</h2><div id="review" data-role="content"></div></div>	
-					
+				<div data-role="collapsible" id="ancestorDiv"><h2>Event Hierarchy</h2><div id="ancestor" data-role="content"></div></div>
 			</div>
 		</div>	
 	</div>
@@ -65,28 +64,33 @@
 	
 	
 	<div data-role="page" id="searchPage" data-add-back-btn="true">
+	
 		<div data-role="header" data-theme="b">
-			<h1>Search</h1>
+			<h1>Search</h1>	
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#" class="ui-btn-active" id="eventSearch" data-theme="c">Search by Event Name</a></li>
+					<li><a href="#" id="geneSearch" data-theme="d"> Search gene symbols</a></li>
+				</ul>
+			</div><!-- /navbar -->
 		</div>
 		<div data-role="content">
-			<table style="width:100%;"><tbody><tr><td>
-				<input type="search" id="search" value="" placeholder="Search"  data-mini="true" > </td>
-				<td style='width:3em;'><a href="#" id="go" data-role="button" data-inline="true" data-mini="true"> Go </a></td></tr>
-				</tbody>
-			</table>
 			
-			<fieldset data-role="controlgroup" id="searchGroup" data-type="horizontal">
-				<select id="searchSpeciesList" data-native-menu="false" data-inline="true" data-mini="true">
+			
+			<table style="width:100%;"><tbody>
+			<tr><td style="width:100%;">
+				<input type="search" id="search" value="" placeholder="Search by Event Name..."  data-mini="true" ></td>
+				<td> <select id="searchSpeciesList" data-native-menu="false" data-inline="true" data-mini="true" data-overlay-theme="b">
 						<option value="null">Choose species</option>
 						<option value="null">All</option>
 				</select>
-				<label><input type="checkbox" id="geneSearch" data-inline="true" data-mini="true" >Search gene symbols</label>
-			</fieldset>
-			
+				</td></tr>
+				</tbody>
+			</table>
+			<a href="#" id="go" data-role="button"  data-mini="true"> Search </a>
 			<h4 id="searchText" style="display:none;"> Search results:</h4>
-			<ul data-role="listview" data-inset="true" id="searchList" data-theme="d"></ul> 
+			<ul data-role="listview" data-inset="true" id="searchList" data-theme="c"></ul> 
 		</div>
-	</div>
 	
 </body>
 </html>

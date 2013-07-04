@@ -10,7 +10,7 @@ a:hover, a:visited, a:link, a:active
 	background-repeat: no-repeat;
 	background-color: inherit !important;
 }
-	
+
 .ui-icon-reaction {
 	background-image: url(images/reaction.gif) !important;
 	background-repeat: no-repeat;
@@ -25,3 +25,5 @@ a:hover, a:visited, a:link, a:active
 	font-family:Fjord;
 	font-size:18px;
 }
+
+.highlight { background-color: yellow }

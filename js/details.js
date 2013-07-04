@@ -1,22 +1,19 @@
 //js for details page
 var detailsHeading, inferredFrom, inferredSpecies; //inferredFrom contains dbId and InferredSpecies contains speciesname
-var onDetails, detailsData; //onDetails: whether user is on details page.. for orthologous events,detailsData will store JSON in getsummationID
+var onDetails, detailsData, detailsSpecies; //onDetails: whether user is on details page.. for orthologous events,detailsData will store JSON in getsummationID
 
-$(document).bind('ready' , function () 		
-{		
-	$('body').on("click",".details",function(e) {
-		ajaxCaller(urlFordbId($(this).attr("id")),getSummationId,$("#detailsContent"));	
-		$.mobile.changePage("#detailsPage");
-	});
+$(document).on('pageinit', '#detailsPage', function () {		
 	
 	$('body').on("change","#pathwaySelect",function(e) {
 		ajaxCaller(urlFordbId($("#pathwaySelect option:selected").val()),getSummationId,$("#detailsContent"));
 		if($.mobile.activePage.attr('id')!="detailsPage") $.mobile.changePage("#detailsPage");				
 	});
 	
-	$('#inferredDiv, #referenceDiv').bind('expand', function () { //delegating inferred data
+	$('#inferredDiv, #referenceDiv, #ancestorDiv').on('expand', function () { 
+		
 		if(this.id=='inferredDiv' && $("#inferred").is(':empty')) ajaxCaller(urlFordbId(inferredFrom),getInferred,$("#inferred"));
 		else if(this.id=='referenceDiv' && $("#reference").is(':empty')) getReference();
+		else if(this.id=='ancestorDiv' && $("#ancestor").is(':empty')) ajaxCaller(urlQueryEventAncestors(detailsData.dbId),getAncestor,$("#ancestor"));
 	});
 	
 	$("#detailsPage").on("pagehide",function(event,ui) {
@@ -38,8 +35,9 @@ $(document).bind('ready' , function ()
 getSummationId =function (data,selector)
 {
 	detailsHeading=data.displayName;
+	detailsSpecies= data.species[0].displayName;
 	$("#detailsCollapsible").children().trigger( "collapse" );
-	$("#author, #review, #inferred, #reference").empty();
+	$("#author, #review, #inferred, #reference, #ancestor").empty();
 	createDropdown(data);
 	
 	detailsData=data;//store json for orthologous event
@@ -83,13 +81,15 @@ getSummationId =function (data,selector)
 		$("#detailsDiv").text("Summary not available");
 		redrawFrontPage();
 	}
+	
+	markSidebar(detailsSpecies);
 }
 
 createDetails = function (data, selector)
 {
 	$("#detailsHeading").text(detailsHeading);
 	$("#detailsDiv").empty()
-		.append("<b>Species Name: </b>"+currentSpecies+"<br/><br/>")
+		.append("<b>Species Name: </b>"+detailsSpecies+"<br/><br/>")
 		.append($.parseHTML(data.text));
 	
 	redrawFrontPage(); // this is to check whether to redraw frontpage. If it is orthologous event, the front page is drawn
@@ -159,6 +159,18 @@ function createReference(data, selector)
 	}
 			
 	$(selector).append(ul).trigger('create');	
+}
+
+function getAncestor(data, selector)
+{
+	var ul = $('<ol data-role="listview" data-inset="true">');
+	for(var i in data[0].databaseObject)
+	{
+		var li= $("<li>"+data[0].databaseObject[i].displayName+"</li>");
+		ul.append(li);
+	}
+			
+	$(selector).append(ul).trigger('create');
 }
 	
 

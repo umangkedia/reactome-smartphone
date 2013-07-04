@@ -15,7 +15,7 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
 		fillSidebar($.mobile.activePage.find('#sideBar'));
 		createControlGroup();		
 	}
-	else markSidebar();	
+	else markSidebar(currentSpecies);	
 	
 	$(document).on('click', '#open-panel', function(){   
          $.mobile.activePage.find('#sideBar').panel("open");    
@@ -27,7 +27,7 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
 });
 
 //front page change based on species
-$(document).bind('ready' , function () {	
+$(document).on('pageinit', '#frontPage', function () {
 	
 	$('body').on("click","#sideBar li",function(e) {
 		console.log("sidebar clicked"+$(this).text());
@@ -65,31 +65,37 @@ createSidebar = function(data, selector) {
 		selector.append(list);
 		list.listview();
 		$.mobile.activePage.find('#sideBar').panel(); //.panel() must be called when something is inserted in panel
-		markSidebar();
+		markSidebar(currentSpecies);
 	}		
 }
 
 function createControlGroup() //create dynamic control group on every page
-{
+{	
+	$currentPage=$.mobile.activePage;
 	//http://jsfiddle.net/androdify/WAzs6/
 	var $ctrlgrp = $("<div/>", {
 		"data-type": "horizontal",
 		"data-role": "controlgroup",
-		"class": "ui-btn-right"
+		"class": "ui-btn-right",
 	});
-	$.mobile.activePage.find('div[data-role="header"]').append($ctrlgrp);
-	$.mobile.activePage.trigger('create');
+	$currentPage.find('div[data-role="header"]').append($ctrlgrp);
+	$currentPage.trigger('create');
+	if($currentPage.attr('id')!=='searchPage')
+	{
+		$ctrlgrp.controlgroup("container")["append"]('<a href="#searchPage" data-role="button" data-icon="search" data-iconpos="notext" id="search-button"></a>');
+		$currentPage.find('#search-button').button();
+	}
 	$ctrlgrp.controlgroup("container")["append"]('<a href="#" data-role="button" data-icon="bars" data-iconpos="notext" id="open-panel"></a>');
-	$.mobile.activePage.find('#open-panel').button();
+	$currentPage.find('#open-panel').button();	
 	$ctrlgrp.controlgroup( "refresh" );
 }
 
 //change theme of selected species in sidebar
-function markSidebar()
+function markSidebar(species)
 {
 	$("#ulSidebar li").not(':first-child').each(function(index) //first child is switch species
 	{
-		if($(this).text() == currentSpecies)
+		if($(this).text() == species)
 		{
 			$(this).attr('data-theme','b').removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
 		}
