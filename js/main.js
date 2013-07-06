@@ -1,6 +1,6 @@
 //main js file
 var schemaType = [], currentSpecies="Homo sapiens"; //to store schema type of events
-
+	
 $(document).on('pageinit', '#frontPage', function () 		
 {	
 	$.mobile.page.prototype.options.addBackBtn = true;

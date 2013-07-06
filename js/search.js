@@ -1,4 +1,4 @@
-var searchEvent=true;//event search or gene search
+var searchEvent=true,searchData, start=0, end;//event search or gene search
 	
 $(document).on('pageinit','#searchPage',function() {	
 	
@@ -38,8 +38,17 @@ $(document).on('pageinit','#searchPage',function() {
 		$("#searchSpeciesList").closest('.ui-select').fadeIn();
 	});
 	
-	if(typeof speciesData !=='undefined') setSpeciesSelect(speciesData,$('#searchSpeciesList'));
-	else ajaxCaller(urlForSpeciesList(),setSpeciesSelect,$("#searchSpeciesList"));
+	$("#prevResult").on('click' , function() {
+		end=start;
+		start=start-20;
+		printSearchResult(start,end,$("#searchList"));
+	});
+	
+	$("#nextResult").on('click' , function() {		
+		start=end;
+		end= (end+20 < searchData.length) ? end+20 : searchData.length;
+		printSearchResult(start,end,$("#searchList"));
+	});
 });
 
 function setSpeciesSelect(data, selector)
@@ -52,27 +61,45 @@ function setSpeciesSelect(data, selector)
 
 function createSearchResult(data,selector)
 {
-	selector.empty();
 	$("#searchText").show();
-	console.log(data);
+	searchData= data;
 	
-	if(data.length==0) 	{
+	if(data.length==0) 	{		
+		selector.empty();
 		$("#searchText").text("No results found");
 		var li=$("<li>No result for your query</li>");
 		selector.append(li);
+		$("#prevResult, #nextResult").hide();			
+		selector.listview('refresh');
 	}
 	else
 	{
-		$("#searchText").text(data.length+" results found for "+ $.trim($('#search').val()));
-		for(var i in data)
-		{
-			var li = $('<li data-icon="false">');
-			var anchor=$('<a href="#" class="details" id="' + data[i].dbId + '" >');
-			var icon = getIcon(data[i].schemaClass);
-			anchor.append('<img src="css/images/'+icon+'.gif" class="ui-li-icon ui-corner-none">'+ data[i].displayName);
-			li.append(anchor);
-			selector.append(li);		
-		}
+		start=0; end= (data.length > 20) ? 20: data.length;
+		printSearchResult(start,end,selector);		
 	}	
-	selector.listview('refresh');	
+}
+
+function printSearchResult(start, end, selector)
+{
+	window.scroll(0,0)
+	selector.empty();	
+	$("#searchText").text("Showing "+(start+1)+" - "+end+" of "+ searchData.length+" results for \""+ $.trim($('#search').val())+"\"");
+	console.log("start="+start+" end="+end);
+	for(var i =start; i<end; i++)
+	{
+		var li = $('<li data-icon="false">');
+		var anchor=$('<a href="#" class="details" id="' + searchData[i].dbId + '" >');
+		var icon = getIcon(searchData[i].schemaClass);
+		anchor.append('<img src="css/images/'+icon+'.gif" class="ui-li-icon ui-corner-none">'+ searchData[i].displayName);
+		li.append(anchor);
+		selector.append(li);		
+	}
+	
+	if(start ===0) $("#prevResult").hide();
+	else $("#prevResult").show();
+	
+	if(end < searchData.length) $("#nextResult").show();
+	else $("#nextResult").hide();
+		
+	selector.listview('refresh');
 }
