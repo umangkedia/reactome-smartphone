@@ -49,6 +49,9 @@ $(document).on('pageinit','#searchPage',function() {
 		end= (end+20 < searchData.length) ? end+20 : searchData.length;
 		printSearchResult(start,end,$("#searchList"));
 	});
+	
+	if(typeof speciesData !=='undefined') setSpeciesSelect(speciesData,$('#searchSpeciesList'));
+	else ajaxCaller(urlForSpeciesList(),setSpeciesSelect,$("#searchSpeciesList"));
 });
 
 function setSpeciesSelect(data, selector)
