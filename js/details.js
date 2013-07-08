@@ -6,11 +6,10 @@ $(document).on('pageinit', '#detailsPage', function () {
 	
 	$('body').on("change","#pathwaySelect",function(e) {
 		ajaxCaller(urlFordbId($("#pathwaySelect option:selected").val()),getSummationId,$("#detailsContent"));
-		if($.mobile.activePage.attr('id')!="detailsPage") $.mobile.changePage("#detailsPage");				
+		if($.mobile.activePage.attr('id')!="detailsPage") $.mobile.changePage("#detailsPage");	
 	});
 	
-	$('#inferredDiv, #referenceDiv, #ancestorDiv').on('expand', function () { 
-		
+	$('#inferredDiv, #referenceDiv, #ancestorDiv').on('expand', function () { 		
 		if(this.id=='inferredDiv' && $("#inferred").is(':empty')) ajaxCaller(urlFordbId(inferredFrom),getInferred,$("#inferred"));
 		else if(this.id=='referenceDiv' && $("#reference").is(':empty')) getReference();
 		else if(this.id=='ancestorDiv' && $("#ancestor").is(':empty')) ajaxCaller(urlQueryEventAncestors(detailsData.dbId),getAncestor,$("#ancestor"));
@@ -21,15 +20,8 @@ $(document).on('pageinit', '#detailsPage', function () {
 	});
 	
 	$("#detailsPage").on("pageshow",function(event,ui) {
-		onDetails=true;
-		//adding back button dynamically, because we need up button in case of orthologous event
-		if($("#detailsPage").find("#detailsBack").length===0)
-		{
-			$("#goUp").remove();
-			$('<a href="#frontPage" id="detailsBack" data-rel="back" data-icon="arrow-l" class="ui-btn-left">Back</a>').appendTo('#detailsHeader');
-			$("#detailsBack").button();
-		}
-	});
+		onDetails=true;		
+	});	
 });
 
 getSummationId =function (data,selector)

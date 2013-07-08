@@ -26,23 +26,6 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
     });
 });
 
-//front page change based on species
-$(document).on('pageinit', '#frontPage', function () {
-	
-	$('body').on("click","#sideBar li",function(e) {
-		console.log("sidebar clicked"+$(this).text());
-		currentSpecies=$(this).text();
-		$.mobile.activePage.find('#sideBar').panel("close"); 
-		$('#pathwayList').empty();
-		if(!onDetails) //if user is not on details page
-		{
-			$.mobile.changePage("#frontPage");	
-			ajaxCaller(frontPageURLFor(currentSpecies),jsonParser,$("#pathwayList"));
-		}
-		else checkOrthologousEvent(); //function is in orthologus.js 		
-	});
-});
-
 function fillSidebar(panel){
 	createSidebar(speciesData,panel);
 }
@@ -85,7 +68,7 @@ function createControlGroup() //create dynamic control group on every page
 		$ctrlgrp.controlgroup("container")["append"]('<a href="#searchPage" data-role="button" data-icon="search" data-iconpos="notext" id="search-button"></a>');
 		$currentPage.find('#search-button').button();
 	}
-	$ctrlgrp.controlgroup("container")["append"]('<a href="#" data-role="button" data-icon="bars" data-iconpos="notext" id="open-panel"></a>');
+	$ctrlgrp.controlgroup("container")["append"]('<a href="#" data-role="button" data-icon="cladogram" data-iconpos="notext" id="open-panel"></a>');
 	$currentPage.find('#open-panel').button();	
 	$ctrlgrp.controlgroup( "refresh" );
 }

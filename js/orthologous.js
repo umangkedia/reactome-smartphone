@@ -38,12 +38,6 @@ function checkOrthologousSpecies(data, selector)
 		{
 			console.log("orthologous event found"+currentSpecies);
 			flag=true;
-			if($("#detailsPage").find("#goUp").length===0)
-			{
-				$("#detailsBack").remove();
-				$('<a href="#frontPage" id="goUp" data-role="button" data-icon="arrow-u" class="ui-btn-left">Home</a>').appendTo('#detailsHeader');
-				$("#goUp").button();
-			}
 			getSummationId(data[i],$("#detailsContent"));
 			break;
 		}

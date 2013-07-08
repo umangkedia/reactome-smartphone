@@ -1,20 +1,5 @@
-#list-button {
-    float:right;
-}
-a:hover, a:visited, a:link, a:active
-{
-    text-decoration: none;	
-}
-.ui-icon-pathway {
-	background-image: url(images/pathway.gif) !important;
-	background-repeat: no-repeat;
-	background-color: inherit !important;
-}
-
-.ui-icon-reaction {
-	background-image: url(images/reaction.gif) !important;
-	background-repeat: no-repeat;
-	background-color: inherit !important;
+.ui-icon-cladogram {
+	background-image: url(images/cladogram.png) !important;
 }
 
 .detailsDiv {

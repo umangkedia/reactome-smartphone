@@ -1,22 +1,21 @@
 //main js file
-var schemaType = [], currentSpecies="Homo sapiens"; //to store schema type of events
+var schemaType = [], currentSpecies="Homo sapiens", dynamicPages= []; //to store schema type of events , to store dynamic nested pages
 	
 $(document).on('pageinit', '#frontPage', function () 		
-{	
-	$.mobile.page.prototype.options.addBackBtn = true;
-	
+{
 	//first call starts here, ajax on page load	
-	ajaxCaller(frontPageURLFor("homo sapiens"),jsonParser,$("#pathwayList"));
+	ajaxCaller(frontPageURLFor("homo sapiens"),jsonParser,$("#frontPage").find("#pathwayList"));
 	
 	$('body').on("click","li .expand",function(e) {
 		var dbId = this.id;
 		var url = urlFordbId(dbId);
 		
 		if(checkSchema($(this).attr("id"))) //only 'schemaclass = pathway' will expand
-		{		
-			var list=$('<ul data-inset="true" data-split-icon="info" data-split-theme="c">'); //creating ul before because jquery mobile ajax is getting completed before our ajax
-			$(this).closest('li').append(list);
-			$(this).closest('ul').listview('refresh');			
+		{
+			var newPageId = createNestedPage($(this).text(), $.mobile.activePage.attr('id'));
+			var list=$('<ul data-inset="true" data-split-icon="info" data-split-theme="c">'); 
+			$("#"+newPageId).find("#pathwayList").append(list);
+			list.listview();	
 			ajaxCaller(url,nestedListCreate,list);		
 		}
 		else createPopup(dbId);
@@ -25,14 +24,41 @@ $(document).on('pageinit', '#frontPage', function ()
 	//detail button
 	$('body').on("click",".details",function(e) {
 		ajaxCaller(urlFordbId($(this).attr("id")),getSummationId,$("#detailsContent"));	
-		$.mobile.changePage("#detailsPage");		
+		$.mobile.changePage("#detailsPage");
 	});
+	
+	//for sidebar species change
+	$('body').on("click","#sideBar li",function(e) {
+		if(!$(this).is(':first-child')) //first child is "switch species"
+		{
+			currentSpecies=$(this).text();
+			$.mobile.activePage.find('#sideBar').panel("close"); 		
+			$('#frontPage').find('#pathwayList').empty();
+			
+			if(!onDetails) { //if user is not on details page
+				$.mobile.changePage("#frontPage");	
+				ajaxCaller(frontPageURLFor(currentSpecies),jsonParser,$("#frontPage").find("#pathwayList"));
+			}
+			else {
+				checkOrthologousEvent(); //function is in orthologus.js	
+				removeDynamicPages();
+			}
+		}
+	});	
 	
 	//error handling test
 	$('#errorRefresh').on("click", function(e) {
 		ajaxCaller(frontPageURLFor("homo sapiens"),jsonParser,$("#pathwayList"));
 	});
 	
+	$(document).on("pagechangefailed", function(event) { 
+		$.mobile.changePage("#frontPage");
+	});
+	
+});
+
+$(document).on('pageshow',"#frontPage", function(event) {
+	removeDynamicPages();	
 });
 
 jsonParser = function (data, ul) {
@@ -49,12 +75,12 @@ jsonParser = function (data, ul) {
 		topUl.append(topLi);
     }
 	ul.append(topUl);
-    $("#frontPage").trigger('create');
+    topUl.listview();
 	
 	if($.mobile.activePage.attr('id')!= "dialog") //no sidebar in case of dialog box
 	{
 		ajaxCaller(urlForSpeciesList(),setSpeciesData,null); //prevent concurrent ajax call
-	}
+	}		
 }
 
 ajaxCaller = function (url, callback, selector) {
@@ -98,6 +124,22 @@ insertSchema = function (dbId, schema)
 	}	
 	var obj = {dbId:dbId , schemaClass:schema}; //store dbId with schemaClass
 	schemaType.push(obj);	
+}
+
+function createNestedPage(heading, currentPage)
+{
+	if(currentPage==='frontPage') var nextPageId='2';	
+	else var nextPageId = (parseInt(currentPage) +1).toString();
+	
+	var found = $.inArray('nextPageId', dynamicPages);
+	if(found===-1) dynamicPages.push(nextPageId); 
+	
+	$("#"+nextPageId).remove();
+	var newPage = $("<div data-role='page' id='"+nextPageId+"' data-add-back-btn='true'><div data-role='header' data-theme='b'><h1>"+heading+"</h1></div><div data-role='content' id='pathwayList'></div></div>");
+	newPage.appendTo($.mobile.pageContainer);
+	console.log("new page created-"+nextPageId);
+	$.mobile.changePage('#'+nextPageId);
+	return nextPageId;
 }
 
 function returnLi(icon, dbId, displayName) //return li to nested list
@@ -164,6 +206,12 @@ function  ajaxPOSTCaller (url,callback, selector, postData) {
 			console.log("error :" + XMLHttpRequest.responseText);
 		}
 	});
+}
+
+function removeDynamicPages()
+{
+	for(var j=0;j<dynamicPages.length;j++) $("#"+dynamicPages[j]).remove();
+	dynamicPages.length=0;
 }
 
 function ajaxStart() {
