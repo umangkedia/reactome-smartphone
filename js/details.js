@@ -133,7 +133,7 @@ getReference = function()
 
 function createReference(data, selector)
 {
-	var ul = $('<ol data-role="listview" data-inset="true">');
+	var ul = $('<ul data-role="listview" data-inset="true" data-theme="c">');
 	for(var i in data)
 	{
 		var text= "";
@@ -142,8 +142,8 @@ function createReference(data, selector)
 			if(j>0) text+=",";
 			text+=data[i].author[j].displayName;
 		}
-		$content1=$("<h5>"+text+"</h5>");
-		$content2=$("<p style='white-space:normal;text-indent: 0;'>"+data[i].displayName+"</p>");
+		$content1=$("<h2 style='font-size:14px; white-space:normal;'>"+text+": "+data[i].displayName+"</h2>");
+		$content2=$("<p style='text-indent:0; font-style:italic; font-size:13px;'><strong>"+data[i].journal+" "+data[i].year+", "+data[i].pages+"</strong></p>");
 		var anchor= $("<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+data[i].pubMedIdentifier+"?dopt=Abstract' target='_blank'>").append($content1)
 																																 .append($content2);
 		var li= $("<li data-icon='false'>").append(anchor);
@@ -155,11 +155,10 @@ function createReference(data, selector)
 
 function getAncestor(data, selector)
 {
-	var ul = $('<ol data-role="listview" data-inset="true">');
+	var ul = $("<ul data-role='listview' data-inset='true' data-icon='false'>");
 	for(var i in data[0].databaseObject)
 	{
-		var li= $("<li>"+data[0].databaseObject[i].displayName+"</li>");
-		ul.append(li);
+		ul.append('<li><a href="#">'+data[0].databaseObject[i].displayName+'</a></li>');
 	}
 			
 	$(selector).append(ul).trigger('create');
