@@ -38,3 +38,8 @@ function urlQueryEventAncestors(key)
 {
 	return baseURL+"queryEventAncestors/"+key;
 }
+
+function urlForSearchSummation() //for search queries
+{
+	return baseURL+"queryEventSpeciesAndSummation/";
+}

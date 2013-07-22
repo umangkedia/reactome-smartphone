@@ -88,21 +88,36 @@ function printSearchResult(start, end, selector)
 	selector.empty();	
 	$("#searchText").text("Showing "+(start+1)+" - "+end+" of "+ searchData.length+" results for \""+ $.trim($('#search').val())+"\"");
 	console.log("start="+start+" end="+end);
+	
+	var postData="";	
 	for(var i =start; i<end; i++)
 	{
-		var li = $('<li data-icon="false">');
-		var anchor=$('<a href="#" class="details" id="' + searchData[i].dbId + '" >');
-		var icon = getIcon(searchData[i].schemaClass);
-		anchor.append('<img src="css/images/'+icon+'.gif" class="ui-li-icon ui-corner-none">'+ searchData[i].displayName);
-		li.append(anchor);
-		selector.append(li);		
+		postData+=searchData[i].dbId;
+		if(i<end-1) postData+=",";
 	}
+	console.log(postData);
+	ajaxPOSTCaller(urlForSearchSummation(),printSearchDetails, selector, postData);
 	
 	if(start ===0) $("#prevResult").hide();
 	else $("#prevResult").show();
 	
 	if(end < searchData.length) $("#nextResult").show();
 	else $("#nextResult").hide();
-		
+}
+
+function printSearchDetails(data, selector) //for printing species name and summation in search results
+{
+	for(var i in data)
+	{
+		var li = $('<li data-icon="false">');
+		var icon = getIcon(data[i].schemaClass);		
+		var anchor=$('<a href="#" class="details" id="' + data[i].dbId + '" >');
+		anchor.append('<h2><img src="css/images/'+icon+'.gif"/>&nbsp;&nbsp;'+data[i].displayName+'</h2>')	
+			  .append("<p style='font-size:13px;'><strong>Species: "+data[i].species[0].displayName+"</strong></p>")
+		      .append("<p>"+data[i].summation[0].displayName+"</p>");
+		li.append(anchor);
+		selector.append(li);		
+	}
+	
 	selector.listview('refresh');
 }
