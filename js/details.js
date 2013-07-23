@@ -139,7 +139,7 @@ function createReference(data, selector)
 		var text= "";
 		for(var j in data[i].author) 
 		{
-			if(j>0) text+=",";
+			if(j>0) text+=", ";
 			text+=data[i].author[j].displayName;
 		}
 		$content1=$("<h2 style='font-size:14px; white-space:normal;'>"+text+": "+data[i].displayName+"</h2>");

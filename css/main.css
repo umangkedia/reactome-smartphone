@@ -10,3 +10,7 @@
 	font-family:Fjord;
 	font-size:18px;
 }
+
+.wrap {	
+	white-space: normal !important;
+}

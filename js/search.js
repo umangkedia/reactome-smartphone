@@ -8,11 +8,9 @@ $(document).on('pageinit','#searchPage',function() {
 		{
 			var postData=$.trim($("#search").val());
 			if(!searchEvent) {	
-				console.log("gene search");
 				ajaxPOSTCaller(urlQueryHitPathways(),createSearchResult, $("#searchList"), postData);
 			}
 			else {
-				console.log("event search");
 				var speciesName=$("#searchSpeciesList option:selected").val();
 				ajaxCaller(urlListByName(postData,speciesName),createSearchResult,$("#searchList"));
 			}
@@ -87,8 +85,7 @@ function printSearchResult(start, end, selector)
 	window.scroll(0,0)
 	selector.empty();	
 	$("#searchText").text("Showing "+(start+1)+" - "+end+" of "+ searchData.length+" results for \""+ $.trim($('#search').val())+"\"");
-	console.log("start="+start+" end="+end);
-	
+		
 	var postData="";	
 	for(var i =start; i<end; i++)
 	{
@@ -110,11 +107,13 @@ function printSearchDetails(data, selector) //for printing species name and summ
 	for(var i in data)
 	{
 		var li = $('<li data-icon="false">');
-		var icon = getIcon(data[i].schemaClass);		
+		var icon = getIcon(data[i].schemaClass);
+		
+		var printText = data[i].summation[0].text;
+		
 		var anchor=$('<a href="#" class="details" id="' + data[i].dbId + '" >');
-		anchor.append('<h2><img src="css/images/'+icon+'.gif"/>&nbsp;&nbsp;'+data[i].displayName+'</h2>')	
-			  .append("<p style='font-size:13px;'><strong>Species: "+data[i].species[0].displayName+"</strong></p>")
-		      .append("<p>"+data[i].summation[0].displayName+"</p>");
+		anchor.append('<h4 class="wrap" style="font-size:11pt; color:#4a6b82;"><img src="css/images/'+icon+'.gif"/>&nbsp;&nbsp;'+data[i].displayName+' ('+data[i].species[0].displayName+')</h4>')
+			  .append("<p class='wrap'>"+printText.substr(0, 100)+"...</p>");
 		li.append(anchor);
 		selector.append(li);		
 	}
