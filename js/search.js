@@ -113,7 +113,7 @@ function printSearchDetails(data, selector) //for printing species name and summ
 		
 		var anchor=$('<a href="#" class="details" id="' + data[i].dbId + '" >');
 		anchor.append('<h4 class="wrap" style="font-size:11pt; color:#4a6b82;"><img src="css/images/'+icon+'.gif"/>&nbsp;&nbsp;'+data[i].displayName+' ('+data[i].species[0].displayName+')</h4>')
-			  .append("<p class='wrap'>"+printText.substr(0, 100)+"...</p>");
+			  .append("<p class='wrap'>"+printText.substr(0, 175).replace(/<(?:.|\n)*?>/gm, '')+"...</p>");
 		li.append(anchor);
 		selector.append(li);		
 	}

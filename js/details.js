@@ -81,7 +81,7 @@ createDetails = function (data, selector)
 {
 	$("#detailsHeading").text(detailsHeading);
 	$("#detailsDiv").empty()
-		.append("<b>Species Name: </b>"+detailsSpecies+"<br/><br/>")
+		.append("<b>Event Name: </b>"+detailsHeading + " ("+detailsSpecies+")<br/><br/>")
 		.append($.parseHTML(data.text));
 	
 	redrawFrontPage(); // this is to check whether to redraw frontpage. If it is orthologous event, the front page is drawn

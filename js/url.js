@@ -1,5 +1,5 @@
-var baseURL="http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/"
-//var baseURL="http://localhost:8080/ReactomeRESTfulAPI/RESTfulWS/";
+//var baseURL="http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/"
+var baseURL="http://localhost:8080/ReactomeRESTfulAPI/RESTfulWS/";
 	
 function frontPageURLFor(species) //frontpage url
 {
