@@ -2,7 +2,10 @@
 var detailsHeading, inferredFrom, inferredSpecies; //inferredFrom contains dbId and InferredSpecies contains speciesname
 var onDetails, detailsData, detailsSpecies; //onDetails: whether user is on details page.. for orthologous events,detailsData will store JSON in getsummationID
 
-$(document).on('pageinit', '#detailsPage', function () {		
+$(document).on('pageinit', '#detailsPage', function () {
+	
+	shrinkHeading(); //set heading to default state
+	setTimeout(expandHeading, 5000); //hide heading after some time interval 
 	
 	$('body').on("change","#pathwaySelect",function(e) {
 		ajaxCaller(urlFordbId($("#pathwaySelect option:selected").val()),getSummationId,$("#detailsContent"));
@@ -21,7 +24,12 @@ $(document).on('pageinit', '#detailsPage', function () {
 	
 	$("#detailsPage").on("pageshow",function(event,ui) {
 		onDetails=true;		
-	});	
+	});
+	
+	$("#detailsHeader").on("tap",function(event,ui) {
+		shrinkHeading();
+		setTimeout(expandHeading, 6000);		
+	});
 });
 
 getSummationId =function (data,selector)
@@ -81,7 +89,7 @@ createDetails = function (data, selector)
 {
 	$("#detailsHeading").text(detailsHeading);
 	$("#detailsDiv").empty()
-		.append("<b>Event Name: </b>"+detailsHeading + " ("+detailsSpecies+")<br/><br/>")
+		.append("<p style='color:#000;'><strong>Event Name: </strong>"+detailsHeading + " ("+detailsSpecies+")</p>")
 		.append($.parseHTML(data.text));
 	
 	redrawFrontPage(); // this is to check whether to redraw frontpage. If it is orthologous event, the front page is drawn
@@ -163,5 +171,14 @@ function getAncestor(data, selector)
 			
 	$(selector).append(ul).trigger('create');
 }
-	
 
+//expand heading after hiding button
+function expandHeading() { 
+	$("#detailsPage").find('div[data-role="controlgroup"]').hide();
+	$("#detailsHeading").removeClass('ui-title1').addClass('ui-title2');
+}
+
+function shrinkHeading() {
+	$("#detailsPage").find('div[data-role="controlgroup"]').show();
+	$("#detailsHeading").removeClass('ui-title2').addClass('ui-title1');
+}	

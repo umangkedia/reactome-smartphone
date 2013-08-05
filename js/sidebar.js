@@ -67,9 +67,9 @@ function createControlGroup() //create dynamic control group on every page
 	{
 		$ctrlgrp.controlgroup("container")["append"]('<a href="#searchPage" data-role="button" data-icon="search" data-iconpos="notext" id="search-button"></a>');
 		$currentPage.find('#search-button').button();
+		$ctrlgrp.controlgroup("container")["append"]('<a href="#" data-role="button" data-icon="cladogram" data-iconpos="notext" id="open-panel"></a>');
+		$currentPage.find('#open-panel').button();	
 	}
-	$ctrlgrp.controlgroup("container")["append"]('<a href="#" data-role="button" data-icon="cladogram" data-iconpos="notext" id="open-panel"></a>');
-	$currentPage.find('#open-panel').button();	
 	$ctrlgrp.controlgroup( "refresh" );
 }
 

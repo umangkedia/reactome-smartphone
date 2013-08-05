@@ -2,8 +2,7 @@ var searchEvent=true,searchData, start=0, end;//event search or gene search
 	
 $(document).on('pageinit','#searchPage',function() {	
 	
-	$("#go").on('click', function()
-	{
+	$("#go").on('click', function() {
 		if($.trim($("#search").val())!="")
 		{
 			var postData=$.trim($("#search").val());
@@ -17,8 +16,7 @@ $(document).on('pageinit','#searchPage',function() {
 		}
 	});	
 	
-	$("#geneSearch").on('click', function ()
-	{
+	$("#geneSearch").on('click', function () {
 		searchEvent=false;
 		$("#search").val('');
 		$("#eventSearch").removeClass('ui-btn-active ui-state-persist');
@@ -27,8 +25,7 @@ $(document).on('pageinit','#searchPage',function() {
 		$("#searchSpeciesList").closest('.ui-select').fadeOut();
 	});
 	
-	$("#eventSearch").on('click', function ()
-	{
+	$("#eventSearch").on('click', function () {
 		searchEvent=true;
 		$("#geneSearch").removeClass('ui-btn-active ui-state-persist');
 		$(this).addClass('ui-btn-active ui-state-persist');
@@ -50,6 +47,11 @@ $(document).on('pageinit','#searchPage',function() {
 	
 	if(typeof speciesData !=='undefined') setSpeciesSelect(speciesData,$('#searchSpeciesList'));
 	else ajaxCaller(urlForSpeciesList(),setSpeciesSelect,$("#searchSpeciesList"));
+});
+
+$(document).on('pageshow', '#searchPage', function() {
+	$(this).find("#sideBar").remove();
+	console.log("sidebar removed"); 	
 });
 
 function setSpeciesSelect(data, selector)
