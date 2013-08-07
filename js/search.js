@@ -21,28 +21,26 @@ $(document).on('pageinit','#searchPage',function() {
 		$("#search").val('');
 		$("#eventSearch").removeClass('ui-btn-active ui-state-persist');
 		$(this).addClass('ui-btn-active ui-state-persist');
-		$("#search").attr('placeholder','Search gene symbols...');
-		$("#searchSpeciesList").closest('.ui-select').fadeOut();
+		$("#search").attr('placeholder','Search by gene...');
 	});
 	
 	$("#eventSearch").on('click', function () {
 		searchEvent=true;
 		$("#geneSearch").removeClass('ui-btn-active ui-state-persist');
 		$(this).addClass('ui-btn-active ui-state-persist');
-		$("#search").attr('placeholder','Search by Event Name...');
-		$("#searchSpeciesList").closest('.ui-select').fadeIn();
+		$("#search").attr('placeholder','Search by Name...');
 	});
 	
 	$("#prevResult").on('click' , function() {
 		end=start;
 		start=start-20;
-		printSearchResult(start,end,$("#searchList"));
+		getSearchResult(start,end,$("#searchList"));
 	});
 	
 	$("#nextResult").on('click' , function() {		
 		start=end;
 		end= (end+20 < searchData.length) ? end+20 : searchData.length;
-		printSearchResult(start,end,$("#searchList"));
+		getSearchResult(start,end,$("#searchList"));
 	});
 	
 	if(typeof speciesData !=='undefined') setSpeciesSelect(speciesData,$('#searchSpeciesList'));
@@ -63,8 +61,7 @@ function setSpeciesSelect(data, selector)
 }
 
 function createSearchResult(data,selector)
-{
-	$("#searchText").show();
+{	
 	searchData= data;
 	
 	if(data.length==0) 	{		
@@ -77,24 +74,21 @@ function createSearchResult(data,selector)
 	}
 	else
 	{
-		start=0; end= (data.length > 20) ? 20: data.length;
-		printSearchResult(start,end,selector);		
+		start=0; end = (data.length > 20) ? 20: data.length;
+		getSearchResult(start,end,selector);		
 	}	
 }
 
-function printSearchResult(start, end, selector)
+function getSearchResult(start, end, selector)
 {
 	window.scroll(0,0)
 	selector.empty();	
-	$("#searchText").text("Showing "+(start+1)+" - "+end+" of "+ searchData.length+" results for \""+ $.trim($('#search').val())+"\"");
 		
 	var postData="";	
-	for(var i =start; i<end; i++)
-	{
+	for(var i = start; i < end; i++) {
 		postData+=searchData[i].dbId;
 		if(i<end-1) postData+=",";
 	}
-	console.log(postData);
 	ajaxPOSTCaller(urlForSearchSummation(),printSearchDetails, selector, postData);
 	
 	if(start ===0) $("#prevResult").hide();
@@ -106,19 +100,28 @@ function printSearchResult(start, end, selector)
 
 function printSearchDetails(data, selector) //for printing species name and summation in search results
 {
+	var speciesName=$("#searchSpeciesList option:selected").val();
+	var count = 0;
+	
 	for(var i in data)
 	{
-		var li = $('<li data-icon="false">');
-		var icon = getIcon(data[i].schemaClass);
-		
-		var printText = data[i].summation[0].text;
-		
-		var anchor=$('<a href="#" class="details" id="' + data[i].dbId + '" >');
-		anchor.append('<h4 class="wrap" style="font-size:11pt; color:#4a6b82;"><img src="css/images/'+icon+'.gif"/>&nbsp;&nbsp;'+data[i].displayName+' ('+data[i].species[0].displayName+')</h4>')
-			  .append("<p class='wrap'>"+printText.substr(0, 175).replace(/<(?:.|\n)*?>/gm, '')+"...</p>");
-		li.append(anchor);
-		selector.append(li);		
+		if (speciesName === "null" || speciesName == data[i].species[0].displayName)
+		{
+			count++;
+			var li = $('<li data-icon="false">');
+			var icon = getIcon(data[i].schemaClass);
+			
+			var printText = data[i].summation[0].text;
+			
+			var anchor=$('<a href="#" class="details" id="' + data[i].dbId + '" >');
+			anchor.append('<h4 class="wrap" style="font-size:11pt; color:#4a6b82;"><img src="css/images/'+icon+'.gif"/>&nbsp;&nbsp;'+data[i].displayName+' ('+data[i].species[0].displayName+')</h4>')
+				  .append("<p class='wrap'>"+printText.substr(0, 175).replace(/<(?:.|\n)*?>/gm, '')+"...</p>");
+			li.append(anchor);
+			selector.append(li);
+		}
 	}
 	
+	$("#searchText").text("Showing "+(start+1)+" - "+(start+count)+" of "+ searchData.length+" results for \""+ $.trim($('#search').val())+"\"")
+					.show();
 	selector.listview('refresh');
 }

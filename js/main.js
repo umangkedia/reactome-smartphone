@@ -215,6 +215,7 @@ function removeDynamicPages()
 }
 
 function ajaxStart() {
+	$('body').append("<div class='ui-loader-background' id='loaderOverlay'> </div>");
     var interval = setInterval(function () {
         $.mobile.loading('show', {
             text: "Fetching data...",
@@ -225,6 +226,7 @@ function ajaxStart() {
 }
 
 function ajaxStop() {
+	$("#loaderOverlay").remove();
     var interval = setInterval(function () {
         $.mobile.loading('hide');
         clearInterval(interval);

@@ -3,10 +3,7 @@ var detailsHeading, inferredFrom, inferredSpecies; //inferredFrom contains dbId 
 var onDetails, detailsData, detailsSpecies; //onDetails: whether user is on details page.. for orthologous events,detailsData will store JSON in getsummationID
 
 $(document).on('pageinit', '#detailsPage', function () {
-	
-	shrinkHeading(); //set heading to default state
-	setTimeout(expandHeading, 5000); //hide heading after some time interval 
-	
+			
 	$('body').on("change","#pathwaySelect",function(e) {
 		ajaxCaller(urlFordbId($("#pathwaySelect option:selected").val()),getSummationId,$("#detailsContent"));
 		if($.mobile.activePage.attr('id')!="detailsPage") $.mobile.changePage("#detailsPage");	
@@ -18,16 +15,21 @@ $(document).on('pageinit', '#detailsPage', function () {
 		else if(this.id=='ancestorDiv' && $("#ancestor").is(':empty')) ajaxCaller(urlQueryEventAncestors(detailsData.dbId),getAncestor,$("#ancestor"));
 	});
 	
+	var timeout; 	
 	$("#detailsPage").on("pagehide",function(event,ui) {
 		onDetails=false;
+		clearTimeout(timeout);
 	});
-	
+		
 	$("#detailsPage").on("pageshow",function(event,ui) {
 		onDetails=true;		
+		shrinkHeading(); //set heading to default state
+		timeout = setTimeout(expandHeading, 6000); //hide heading after some time interval 
 	});
-	
-	$("#detailsHeader").on("tap",function(event,ui) {
+
+	$("#detailsPage").on("tap",function(event,ui) {
 		shrinkHeading();
+		clearTimeout(timeout);
 		setTimeout(expandHeading, 6000);		
 	});
 });
@@ -163,9 +165,8 @@ function createReference(data, selector)
 
 function getAncestor(data, selector)
 {
-	var ul = $("<ul data-role='listview' data-inset='true' data-icon='false'>");
-	for(var i in data[0].databaseObject)
-	{
+	var ul = $("<ul data-role='listview' data-inset='true' class='no-shadow' data-icon='false'>");
+	for(var i in data[0].databaseObject) {
 		ul.append('<li><a href="#">'+data[0].databaseObject[i].displayName+'</a></li>');
 	}
 			
@@ -175,10 +176,12 @@ function getAncestor(data, selector)
 //expand heading after hiding button
 function expandHeading() { 
 	$("#detailsPage").find('div[data-role="controlgroup"]').hide();
+	$("#detailsPage").find('a[data-rel="back"]').hide();
 	$("#detailsHeading").removeClass('ui-title1').addClass('ui-title2');
 }
 
 function shrinkHeading() {
+	$("#detailsPage").find('a[data-rel="back"]').show();
 	$("#detailsPage").find('div[data-role="controlgroup"]').show();
 	$("#detailsHeading").removeClass('ui-title2').addClass('ui-title1');
 }	

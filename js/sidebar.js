@@ -21,7 +21,7 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
          $.mobile.activePage.find('#sideBar').panel("open");    
 	});
     
-	$(document).on('swipeleft', 'body', function(){   
+	$(document).on('body', function(){   
          $.mobile.activePage.find('#sideBar').panel("open");       
     });
 });

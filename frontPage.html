@@ -74,15 +74,16 @@
 		<div data-role="content">
 			<div data-role="navbar">
 				<ul>
-					<li><a href="#" class="ui-btn-active" id="eventSearch" data-theme="a">Search by Event Name</a></li>
-					<li><a href="#" id="geneSearch" data-theme="a"> Search gene symbols</a></li>
+					<li><a href="#" class="ui-btn-active" id="eventSearch" data-theme="a">Search by Name</a></li>
+					<li><a href="#" id="geneSearch" data-theme="a"> Search by gene</a></li>
 				</ul>
 			</div><!-- /navbar -->			
 			
 			<table style="width:100%;"><tbody>
 			<tr><td style="width:100%;">
-				<input type="search" id="search" value="" placeholder="Search by Event Name..."  data-mini="true" ></td>
-				<td> <select id="searchSpeciesList" data-native-menu="false" data-inline="true" data-mini="true" data-overlay-theme="b">
+				<input type="search" id="search" value="" placeholder="Search by Name..."  data-mini="true" ></td></tr>
+				<tr>
+				<td> <select id="searchSpeciesList" data-native-menu="false" data-mini="true" data-overlay-theme="b">
 						<option value="null">Choose species</option>
 						<option value="null">All</option>
 				</select>
