@@ -1,45 +1,41 @@
-var baseURL="http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/"
-//var baseURL="http://localhost:8080/ReactomeRESTfulAPI/RESTfulWS/";
-	
-function frontPageURLFor(species) //frontpage url
-{
-	var key=species.toLowerCase().replace(/\s/g,"+");
+//var baseURL="http://reactomews.oicr.on.ca:8080/ReactomeRESTfulAPI/RESTfulWS/"
+var baseURL="http://localhost:8080/ReactomeRESTfulAPI/RESTfulWS/";
+
+function frontPageURLFor(species) {
+	var key = species.toLowerCase().replace(/\s/g,"+");
 	return baseURL+"frontPageItems/"+key;
 }
 
-function urlForSpeciesList() //species list
-{
-	return baseURL+"speciesList";
+function urlForSpeciesList() {
+	return baseURL + "speciesList";
 }
 
-function urlFordbId(dbId) //sub pathways based on dbID
-{
-	return baseURL+"queryById/Pathway/"+dbId;
+//sub pathways based on dbID
+function urlFordbId(dbId) {
+	return baseURL + "queryById/Pathway/" + dbId;
 }
 
-function urlForQueryByIds() //sub pathways based on dbID
-{
-	return baseURL+"queryByIds/Pathway/";
+//sub pathways based on dbID
+function urlForQueryByIds() {
+	return baseURL + "queryByIds/Pathway/";
 }
 
-function urlListByName(key, species)
-{
-	key=key.toLowerCase().replace(/\s/g,"+");
-	species=species.toLowerCase().replace(/\s/g,"+");
-	return baseURL+"listByName/Event/"+key+"/"+species;
+function urlListByName(key, species) {
+	key = key.toLowerCase().replace(/\s/g,"+");
+	species = species.toLowerCase().replace(/\s/g,"+");
+	return baseURL + "listByName/Event/" + key + "/"+species;
 }
 
-function urlQueryHitPathways() //gene search
-{
-	return baseURL+"queryHitPathways";
+//gene search
+function urlQueryHitPathways() {
+	return baseURL + "queryHitPathways";
 }
 
-function urlQueryEventAncestors(key)
-{
-	return baseURL+"queryEventAncestors/"+key;
+function urlQueryEventAncestors(key) {
+	return baseURL + "queryEventAncestors/" + key;
 }
 
-function urlForSearchSummation() //for search queries
-{
-	return baseURL+"queryEventSpeciesAndSummation/";
+//for search queries
+function urlForSearchSummation() {
+	return baseURL + "queryEventSpeciesAndSummation/";
 }

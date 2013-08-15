@@ -29,13 +29,12 @@ $(document).on('pageinit', '#frontPage', function ()
 	
 	//for sidebar species change
 	$('body').on("click","#sideBar li",function(e) {
-		if(!$(this).is(':first-child')) //first child is "switch species"
-		{
+		if (!$(this).is(':first-child')) {
 			currentSpecies=$(this).text();
 			$.mobile.activePage.find('#sideBar').panel("close"); 		
 			$('#frontPage').find('#pathwayList').empty();
 			
-			if(!onDetails) { //if user is not on details page
+			if (!onDetails) { //if user is not on details page
 				$.mobile.changePage("#frontPage");	
 				ajaxCaller(frontPageURLFor(currentSpecies),jsonParser,$("#frontPage").find("#pathwayList"));
 			}
@@ -59,11 +58,11 @@ $(document).on('pageinit', '#frontPage', function ()
 
 $(document).on('pageshow',"#frontPage", function(event) {
 	removeDynamicPages();	
+	$(this).find('a[data-rel=back]').buttonMarkup({iconpos: 'notext'});
 });
 
 jsonParser = function (data, ul) {
 	
-    console.log("jsonParser");
 	schemaType.length=0; //on species change
     $("#heading").text(currentSpecies);
 	var topUl= $('<ul data-role="listview" data-inset="true" data-theme="d" data-split-icon="info" data-split-theme="c">');
@@ -77,9 +76,9 @@ jsonParser = function (data, ul) {
 	ul.append(topUl);
     topUl.listview();
 	
-	if($.mobile.activePage.attr('id')!= "dialog") //no sidebar in case of dialog box
-	{
-		ajaxCaller(urlForSpeciesList(),setSpeciesData,null); //prevent concurrent ajax call
+	//no sidebar in case of dialog box
+	if ($.mobile.activePage.attr('id') != "dialog")  {
+		ajaxCaller(urlForSpeciesList(),setSpeciesData,null); 
 	}		
 }
 
@@ -128,16 +127,20 @@ insertSchema = function (dbId, schema)
 
 function createNestedPage(heading, currentPage)
 {
-	if(currentPage==='frontPage') var nextPageId='2';	
-	else var nextPageId = (parseInt(currentPage) +1).toString();
+	if(currentPage==='frontPage') 
+		var nextPageId='2';	
+	else 
+		var nextPageId = (parseInt(currentPage) +1).toString();
 	
 	var found = $.inArray('nextPageId', dynamicPages);
-	if(found===-1) dynamicPages.push(nextPageId); 
+	if(found === -1)
+		dynamicPages.push(nextPageId); 
 	
 	$("#"+nextPageId).remove();
-	var newPage = $("<div data-role='page' id='"+nextPageId+"' data-add-back-btn='true'><div data-role='header' data-theme='b'><h1>"+heading+"</h1></div><div data-role='content' id='pathwayList'></div></div>");
+	var newPage = $("<div data-role='page' id='"+nextPageId+"'>" +
+	"<div data-role='header' data-theme='b'> <a href='#frontPage' id='detailsBack' data-rel='back' data-icon='arrow-l' data-iconpos='notext'>Back</a>" +
+	"<h1>"+heading+"</h1></div><div data-role='content' id='pathwayList'></div></div>");
 	newPage.appendTo($.mobile.pageContainer);
-	console.log("new page created-"+nextPageId);
 	$.mobile.changePage('#'+nextPageId);
 	return nextPageId;
 }
@@ -147,23 +150,25 @@ function returnLi(icon, dbId, displayName) //return li to nested list
 	var li = $("<li>");
 	var anchor=$('<a href="#" class="expand" id="' + dbId + '">');
 	anchor.append('<img src="css/images/'+icon+'.gif" class="ui-li-icon ui-corner-none">'+ displayName);
-	li.append(anchor);
-	li.append('<a href="#" class="details" id="' + dbId + '">Click for details</a>');
+	li.append(anchor).append('<a href="#" class="details" id="' + dbId + '">Click for details</a>');
 	return li;
 }
 
 function checkSchema(dbId)
 {
-	for(var i=0;i<schemaType.length;i++) {
-		if(schemaType[i].dbId == dbId && schemaType[i].schemaClass.toUpperCase() === "PATHWAY") return true;		
+	for(var i = 0; i < schemaType.length; i++) {
+		if(schemaType[i].dbId == dbId && schemaType[i].schemaClass.toUpperCase() === "PATHWAY")
+			return true;		
 	}	
 	return false;
 }
 
 function getIcon(schemaClass) //get icon based on schemaclass
 {
-	if(schemaClass.toUpperCase() == 'PATHWAY') return 'pathway';
-	else if(schemaClass.toUpperCase() == 'BLACKBOXEVENT') return 'blackbox';
+	if(schemaClass.toUpperCase() == 'PATHWAY') 
+		return 'pathway';
+	else if(schemaClass.toUpperCase() == 'BLACKBOXEVENT') 
+			return 'blackbox';
 	
 	return 'reaction';
 }
@@ -210,7 +215,8 @@ function  ajaxPOSTCaller (url,callback, selector, postData) {
 
 function removeDynamicPages()
 {
-	for(var j=0;j<dynamicPages.length;j++) $("#"+dynamicPages[j]).remove();
+	for(var j = 0; j < dynamicPages.length; j++)
+		$("#"+dynamicPages[j]).remove();
 	dynamicPages.length=0;
 }
 

@@ -28,7 +28,7 @@
 	
 	<div data-role="page" id="detailsPage" data-add-back-btn="false">
 		<div data-role="header" data-theme="b" id="detailsHeader">
-			<a href="#frontPage" id="detailsBack" data-rel="back" data-icon="arrow-l">Back</a>
+			<a href="#frontPage" id="detailsBack" data-rel="back" data-icon="arrow-l" data-iconpos="notext">Back</a>
 			<h3 id="detailsHeading" class="ui-title1">Reactome</h3>
 		</div>
 		<div data-role="content" id="detailsContent" data-inset="true">
@@ -65,19 +65,19 @@
 	</div>
 	
 	
-	<div data-role="page" id="searchPage" data-add-back-btn="true">
-	
+	<div data-role="page" id="searchPage" data-add-back-btn="false">	
 		<div data-role="header" data-theme="b">
-			<h1>Search</h1>	
-			
+		<a href="#frontPage" id="detailsBack" data-rel="back" data-icon="arrow-l" data-iconpos="notext">Back</a>
+			<h1>Search</h1>				
 		</div>
+		
 		<div data-role="content">
 			<div data-role="navbar">
 				<ul>
 					<li><a href="#" class="ui-btn-active" id="eventSearch" data-theme="a">Search by Name</a></li>
-					<li><a href="#" id="geneSearch" data-theme="a"> Search by gene</a></li>
+					<li><a href="#" id="geneSearch" data-theme="a"> Search by Gene</a></li>
 				</ul>
-			</div><!-- /navbar -->			
+			</div>		
 			
 			<table style="width:100%;"><tbody>
 			<tr><td style="width:100%;">

@@ -3,8 +3,7 @@ var speciesAjax =0,speciesData; //to check whether we have got the species list 
 $(document).on('pagebeforeshow', '[data-role="page"]', function()
 {
 	//workaround to include panel on every page
-	if($.mobile.activePage.find('#sideBar').length ==0)
-	{
+	if ($.mobile.activePage.find('#sideBar').length == 0) {
 		$('<div>').attr({
 			'id':'sideBar',
 			'data-role':'panel',
@@ -15,30 +14,26 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
 		fillSidebar($.mobile.activePage.find('#sideBar'));
 		createControlGroup();		
 	}
-	else markSidebar(currentSpecies);	
+	else 
+		markSidebar(currentSpecies);	
 	
-	$(document).on('click', '#open-panel', function(){   
+	$(document).on('click', '#open-panel', function() {   
          $.mobile.activePage.find('#sideBar').panel("open");    
 	});
-    
-	$(document).on('body', function(){   
-         $.mobile.activePage.find('#sideBar').panel("open");       
-    });
 });
 
-function fillSidebar(panel){
+function fillSidebar(panel) {
 	createSidebar(speciesData,panel);
 }
 
-function setSpeciesData(data,selector){
+function setSpeciesData(data,selector) {
 	speciesData=data;
 	createSidebar(speciesData,$.mobile.activePage.find('#sideBar'));
 }
 
 createSidebar = function(data, selector) {
 	
-	if(typeof data!=="undefined")
-	{
+	if (typeof data !== "undefined") {
 		selector.empty();
 		var list = $('<ul data-role="listview" data-theme="c" data-inset="false" id="ulSidebar">');	
 		list.append("<li data-theme='b' style='text-align:center;'>Switch Species</li>");
@@ -47,15 +42,17 @@ createSidebar = function(data, selector) {
 		}
 		selector.append(list);
 		list.listview();
-		$.mobile.activePage.find('#sideBar').panel(); //.panel() must be called when something is inserted in panel
+		$.mobile.activePage.find('#sideBar').panel();
 		markSidebar(currentSpecies);
 	}		
 }
 
-function createControlGroup() //create dynamic control group on every page
-{	
+//create dynamic control group on every page
+//http://jsfiddle.net/androdify/WAzs6/
+
+function createControlGroup() {
+	
 	$currentPage=$.mobile.activePage;
-	//http://jsfiddle.net/androdify/WAzs6/
 	var $ctrlgrp = $("<div/>", {
 		"data-type": "horizontal",
 		"data-role": "controlgroup",
@@ -63,8 +60,8 @@ function createControlGroup() //create dynamic control group on every page
 	});
 	$currentPage.find('div[data-role="header"]').append($ctrlgrp);
 	$currentPage.trigger('create');
-	if($currentPage.attr('id')!=='searchPage')
-	{
+	
+	if ($currentPage.attr('id') !== 'searchPage') {
 		$ctrlgrp.controlgroup("container")["append"]('<a href="#searchPage" data-role="button" data-icon="search" data-iconpos="notext" id="search-button"></a>');
 		$currentPage.find('#search-button').button();
 		$ctrlgrp.controlgroup("container")["append"]('<a href="#" data-role="button" data-icon="cladogram" data-iconpos="notext" id="open-panel"></a>');
@@ -76,12 +73,11 @@ function createControlGroup() //create dynamic control group on every page
 //change theme of selected species in sidebar
 function markSidebar(species)
 {
-	$("#ulSidebar li").not(':first-child').each(function(index) //first child is switch species
-	{
-		if($(this).text() == species)
-		{
+	$("#ulSidebar li").not(':first-child').each(function(index) {
+		if ($(this).text() == species) {
 			$(this).attr('data-theme','b').removeClass("ui-btn-up-c").addClass("ui-btn-up-b");
 		}
-		else $(this).attr('data-theme','c').removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
+		else 
+			$(this).attr('data-theme','c').removeClass("ui-btn-up-b").addClass("ui-btn-up-c");
 	});
 }
