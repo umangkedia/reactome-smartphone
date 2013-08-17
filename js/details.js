@@ -84,8 +84,8 @@ getSummationId = function (data,selector) {
 	markSidebar(detailsSpecies);
 }
 
-createDetails = function (data, selector)
-{
+createDetails = function (data, selector) {
+	
 	$("#detailsHeading").text(detailsHeading);
 	$("#detailsDiv").empty()
 		.append("<p style='color:#000;'><strong>Event Name: </strong>"+detailsHeading + " ("+detailsSpecies+")</p>")
@@ -94,8 +94,8 @@ createDetails = function (data, selector)
 	redrawFrontPage(); 
 }
 
-createDropdown = function (data)
-{
+createDropdown = function (data) {
+	
 	$select = $('<select id="pathwaySelect" data-native-menu="false" data-iconpos="notext" data-divider-theme="a">');
 	$("#detailsPage").find("#pathwaySelect").remove();
 	if (data.schemaClass.toUpperCase() === "PATHWAY")
@@ -138,15 +138,14 @@ getReference = function() {
 getAuthors = function() {
 	var ul = $('<ul data-role="listview" data-inset="true">');
 	for (var i in detailsData.authored)
-		ul.append("<li>" + data.authored[0].displayName + "</li>");		
+		ul.append("<li>" + detailsData.authored[0].displayName + "</li>");		
 	$("#author").append(ul).trigger('create');
 }
 
 getReviewers = function() {
-	$("#reviewDiv").show();
 	var ul = $('<ul data-role="listview" data-inset="true">');
-	for (var i in data.reviewed)
-		ul.append("<li>" + data.reviewed[0].displayName + "</li>");
+	for (var i in detailsData.reviewed)
+		ul.append("<li>" + detailsData.reviewed[0].displayName + "</li>");
 	$("#review").append(ul).trigger('create');
 }
 
@@ -183,13 +182,13 @@ function getAncestor(data, selector) {
 
 //expand heading after hiding button
 function expandHeading() { 
-	$("#detailsPage").find('div[data-role="controlgroup"]').slideUp();
-	$("#detailsPage").find('a[data-rel="back"]').slideUp();
+	$("#detailsPage").find('div[data-role="controlgroup"]').fadeOut('fast');
+	$("#detailsPage").find('a[data-rel="back"]').fadeOut('fast');
 	$("#detailsHeading").removeClass('ui-title1').addClass('ui-title2');
 }
 
 function shrinkHeading() {
-	$("#detailsPage").find('a[data-rel="back"]').slideDown();
-	$("#detailsPage").find('div[data-role="controlgroup"]').slideDown();
+	$("#detailsPage").find('a[data-rel="back"]').fadeIn('fast');
+	$("#detailsPage").find('div[data-role="controlgroup"]').fadeIn('fast');
 	$("#detailsHeading").removeClass('ui-title2').addClass('ui-title1');
 }	

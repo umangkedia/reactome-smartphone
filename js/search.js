@@ -1,7 +1,7 @@
-var searchEvent=true,searchData, start=0, end, resultsPerPage = 20;//event search or gene search
+var searchEvent=true, searchData, start=0, end, resultsPerPage = 20;//event search or gene search
 	
 $(document).on('pageinit','#searchPage',function() {	
-	
+		
 	$("#go").on('click', function() {
 		var query = $.trim($("#search").val());
 		if (query != "") {			
@@ -44,11 +44,11 @@ $(document).on('pageinit','#searchPage',function() {
 	if (typeof speciesData !== 'undefined')
 		setSpeciesSelect(speciesData,$('#searchSpeciesList'));
 	else 
-		ajaxCaller(urlForSpeciesList(),setSpeciesSelect,$("#searchSpeciesList"));
-});
+		ajaxCaller(urlForSpeciesList(),setSpeciesSelect,$("#searchSpeciesList"));	
 
-$(document).on('pageshow', '#searchPage', function() {
-	$(this).find("#sideBar").remove();
+	$(document).on('pageshow', '#searchPage', function() {
+		$(this).find("#sideBar").remove();
+	});
 });
 
 function setSpeciesSelect(data, selector) {
@@ -58,15 +58,13 @@ function setSpeciesSelect(data, selector) {
 	selector.selectmenu('refresh');
 }
 
-function createSearchResult(data, selector)
-{	
+function createSearchResult(data, selector) {	
 	searchData = data;
 	start=0; end = (data.length > resultsPerPage) ? resultsPerPage: data.length;
 	getSearchResult(start,end,selector);			
 }
 
-function getSearchResult(start, end, selector)
-{
+function getSearchResult(start, end, selector) {
 	window.scroll(0,0)
 	selector.empty();
 

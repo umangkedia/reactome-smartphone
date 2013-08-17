@@ -22,7 +22,7 @@ $(document).on('pageinit', '#frontPage', function ()
 	});
 	
 	//detail button
-	$('body').on("click",".details",function(e) {
+	$('body').on("click", ".details", function(e) {
 		ajaxCaller(urlFordbId($(this).attr("id")),getSummationId,$("#detailsContent"));	
 		$.mobile.changePage("#detailsPage");
 	});
@@ -51,6 +51,7 @@ $(document).on('pageinit', '#frontPage', function ()
 	});
 	
 	$(document).on("pagechangefailed", function(event) { 
+		console.log("page change failed");
 		$.mobile.changePage("#frontPage");
 	});
 	
@@ -138,7 +139,7 @@ function createNestedPage(heading, currentPage)
 	
 	$("#"+nextPageId).remove();
 	var newPage = $("<div data-role='page' id='"+nextPageId+"'>" +
-	"<div data-role='header' data-theme='b'> <a href='#frontPage' id='detailsBack' data-rel='back' data-icon='arrow-l' data-iconpos='notext'>Back</a>" +
+	"<div data-role='header' data-theme='b'> <a href='#frontPage' data-rel='back' data-icon='arrow-l' data-iconpos='notext'>Back</a>" +
 	"<h1>"+heading+"</h1></div><div data-role='content' id='pathwayList'></div></div>");
 	newPage.appendTo($.mobile.pageContainer);
 	$.mobile.changePage('#'+nextPageId);

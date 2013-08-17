@@ -1,7 +1,7 @@
 var redraw=false; //this is to check whether to redraw frontpage. If it is orthologous event, the front page is drawn
 
-function checkOrthologousEvent()
-{	
+function checkOrthologousEvent() {
+	
 	var data = detailsData;
 	if (data.species[0].displayName.toUpperCase() === "HOMO SAPIENS") {
 		compareEvent(data, $("#detailsContent")); //if species is human we need not make additional REST call
@@ -49,6 +49,7 @@ function checkOrthologousSpecies(data, selector) {
 
 function redrawFrontPage() {
 	if (redraw) {
+		console.log("front page redrawn");
 		redraw=false;
 		ajaxCaller(frontPageURLFor(currentSpecies), jsonParser, $("#pathwayList"));		
 	}
