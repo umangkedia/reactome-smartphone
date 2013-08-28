@@ -6,7 +6,7 @@ $(document).on('pageinit', '#frontPage', function ()
 	//first call starts here, ajax on page load	
 	ajaxCaller(frontPageURLFor("homo sapiens"),jsonParser,$("#frontPage").find("#pathwayList"));
 	
-	$('body').on("click","li .expand",function(e) {
+	$('body').on("vclick","li .expand",function(e) {
 		var dbId = this.id;
 		var url = urlFordbId(dbId);
 		
@@ -18,17 +18,16 @@ $(document).on('pageinit', '#frontPage', function ()
 			list.listview();	
 			ajaxCaller(url,nestedListCreate,list);		
 		}
-		else createPopup(dbId);
+		else createPopup();
 	});
 	
 	//detail button
-	$('body').on("click", ".details", function(e) {
+	$('body').on("vclick", ".details", function(e) {
 		ajaxCaller(urlFordbId($(this).attr("id")),getSummationId,$("#detailsContent"));	
-		$.mobile.changePage("#detailsPage");
 	});
 	
 	//for sidebar species change
-	$('body').on("click","#sideBar li",function(e) {
+	$('body').on("vclick","#sideBar li",function(e) {
 		if (!$(this).is(':first-child')) {
 			currentSpecies=$(this).text();
 			$.mobile.activePage.find('#sideBar').panel("close"); 		
@@ -46,12 +45,11 @@ $(document).on('pageinit', '#frontPage', function ()
 	});	
 	
 	//error handling test
-	$('#errorRefresh').on("click", function(e) {
+	$('#errorRefresh').on("vclick", function(e) {
 		ajaxCaller(frontPageURLFor("homo sapiens"),jsonParser,$("#pathwayList"));
 	});
 	
 	$(document).on("pagechangefailed", function(event) { 
-		console.log("page change failed");
 		$.mobile.changePage("#frontPage");
 	});
 	
@@ -95,6 +93,7 @@ ajaxCaller = function (url, callback, selector) {
 			callback(data, selector);
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			ajaxStop();
 			console.log("error :" + XMLHttpRequest.responseText);
 			$.mobile.changePage("#error", {
 				role: "dialog"
@@ -174,7 +173,7 @@ function getIcon(schemaClass) //get icon based on schemaclass
 	return 'reaction';
 }
 
-function createPopup(position)
+function createPopup()
 {
 	var $popUp = $("<div/>",{
 		'data-role':'popup',
@@ -209,6 +208,7 @@ function  ajaxPOSTCaller (url,callback, selector, postData) {
 			callback(data, selector);
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			ajaxStop();
 			console.log("error :" + XMLHttpRequest.responseText);
 		}
 	});

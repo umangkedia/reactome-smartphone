@@ -17,7 +17,7 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
 	else 
 		markSidebar(currentSpecies);	
 	
-	$(document).on('click', '#open-panel', function() {   
+	$(document).on('vclick', '#open-panel', function() {   
          $.mobile.activePage.find('#sideBar').panel("open");    
 	});
 });

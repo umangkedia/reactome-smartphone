@@ -2,7 +2,7 @@ var searchEvent=true, searchData, start=0, end, resultsPerPage = 20;//event sear
 	
 $(document).on('pageinit','#searchPage',function() {	
 		
-	$("#go").on('click', function() {
+	$("#go").on('vclick', function() {
 		var query = $.trim($("#search").val());
 		if (query != "") {			
 			if (!searchEvent) {	
@@ -15,27 +15,27 @@ $(document).on('pageinit','#searchPage',function() {
 		}
 	});	
 	
-	$("#geneSearch").on('click', function () {
+	$("#geneSearch").on('vclick', function () {
 		searchEvent=false;
 		$("#eventSearch").removeClass('ui-btn-active ui-state-persist');
 		$(this).addClass('ui-btn-active ui-state-persist');
 		$("#search").attr('placeholder','Search by Gene...');
 	});
 	
-	$("#eventSearch").on('click', function () {
+	$("#eventSearch").on('vclick', function () {
 		searchEvent = true;
 		$("#geneSearch").removeClass('ui-btn-active ui-state-persist');
 		$(this).addClass('ui-btn-active ui-state-persist');
 		$("#search").attr('placeholder','Search by Name...');
 	});
 	
-	$("#prevResult").on('click' , function() {
+	$("#prevResult").on('vclick' , function() {
 		end = start;
 		start = start - resultsPerPage;
 		getSearchResult(start,end,$("#searchList"));
 	});
 	
-	$("#nextResult").on('click' , function() {		
+	$("#nextResult").on('vclick' , function() {		
 		start = end;
 		end = (end + resultsPerPage < searchData.length) ? end + resultsPerPage : searchData.length;
 		getSearchResult(start,end,$("#searchList"));

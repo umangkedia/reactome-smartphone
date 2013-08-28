@@ -6,8 +6,6 @@ $(document).on('pageinit', '#detailsPage', function () {
 			
 	$('body').on("change","#pathwaySelect",function(e) {
 		ajaxCaller(urlFordbId($("#pathwaySelect option:selected").val()),getSummationId,$("#detailsContent"));
-		if ($.mobile.activePage.attr('id') != "detailsPage") 
-			$.mobile.changePage("#detailsPage");	
 	});
 	
 	$('#inferredDiv, #referenceDiv, #ancestorDiv, #authorDiv, #reviewDiv').on('expand', function () { 		
@@ -35,7 +33,7 @@ $(document).on('pageinit', '#detailsPage', function () {
 		timeout = setTimeout(expandHeading, 6000); //hide heading after some time interval 
 	});
 
-	$("#detailsPage").on("tap",function(event,ui) {
+	$("#detailsContent").on("vclick",function(event,ui) {
 		shrinkHeading();
 		clearTimeout(timeout);
 		timeout = setTimeout(expandHeading, 6000);		
@@ -44,6 +42,7 @@ $(document).on('pageinit', '#detailsPage', function () {
 
 getSummationId = function (data,selector) {
 	
+	$.mobile.changePage("#detailsPage");
 	detailsData = data;
 	detailsHeading = data.displayName;
 	detailsSpecies = data.species[0].displayName;
