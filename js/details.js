@@ -1,6 +1,6 @@
 //js for details page
 var detailsHeading, inferredFrom, inferredSpecies; 
-var onDetails, detailsData, detailsSpecies; //onDetails: whether user is on details page.. for orthologous events,detailsData will store JSON in getsummationID
+var onDetails, detailsData, detailsSpecies; //onDetails: whether user is on details page.. detailsData stores JSON of the item shown on details page
 
 $(document).on('pageinit', '#detailsPage', function () {
 			
@@ -33,7 +33,7 @@ $(document).on('pageinit', '#detailsPage', function () {
 		timeout = setTimeout(expandHeading, 6000); //hide heading after some time interval 
 	});
 
-	$("#detailsContent").on("vclick",function(event,ui) {
+	$("#detailsPage").on("vclick",function(event,ui) {
 		shrinkHeading();
 		clearTimeout(timeout);
 		timeout = setTimeout(expandHeading, 6000);		
@@ -119,7 +119,8 @@ getInferred = function (data,selector) {
 }
 
 createInferred = function (data,selector) {
-	selector.append("<p><b>"+inferredSpecies+":</b> "+data.text+"</p>");
+	//detailsData i
+	selector.append("<p><b><a href='#' class='details' id='" + detailsData.inferredFrom[0].dbId + "' >"+inferredSpecies+":</a></b> "+data.text+"</p>");
 }
 
 getReference = function() {
