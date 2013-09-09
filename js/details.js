@@ -84,11 +84,17 @@ getSummationId = function (data,selector) {
 }
 
 createDetails = function (data, selector) {
+	$newText = $($.parseHTML(data.text));
+	
+	//REST api contains a dead link when the details are inferred from some species
+	if (JSON.stringify(detailsData.isInferred) == "true") {
+		$newText.find('a:first').attr('href', 'http://www.reactome.org/electronic_inference_compara.html');
+	}
 	
 	$("#detailsHeading").text(detailsHeading);
 	$("#detailsDiv").empty()
 		.append("<p style='color:#000;'><strong>Event Name: </strong>"+detailsHeading + " ("+detailsSpecies+")</p>")
-		.append($.parseHTML(data.text));
+		.append($newText);
 	
 	redrawFrontPage(); 
 }
@@ -119,7 +125,6 @@ getInferred = function (data,selector) {
 }
 
 createInferred = function (data,selector) {
-	//detailsData i
 	selector.append("<p><b><a href='#' class='details' id='" + detailsData.inferredFrom[0].dbId + "' >"+inferredSpecies+":</a></b> "+data.text+"</p>");
 }
 
@@ -169,15 +174,14 @@ function createReference(data, selector) {
 	$(selector).append(ul).trigger('create');	
 }
 
-function getAncestor(data, selector) {	
-	//creating hierarchical effect
-	var leftmargin = 0;
+function getAncestor(data, selector) {
+	var $p = $("<p>");
 	for (var i in data[0].databaseObject) {
-		var ul = $('<ul data-role="listview" data-inset="true"  class="no-shadow" data-icon="false" style="margin-left:'+leftmargin+'px !important;">');
-		ul.append('<li><a href="#" class="details" id="'+ data[0].databaseObject[i].dbId +'">'+data[0].databaseObject[i].displayName+'</a></li>');
-		leftmargin += 20;
-		$(selector).append(ul).trigger('create');
+		$p.append('<a href="#" class="details" id="'+ data[0].databaseObject[i].dbId +'">'+data[0].databaseObject[i].displayName+'</a>');
+		if (i < data[0].databaseObject.length - 1)
+			$p.append('&nbsp;&#8834;&nbsp;');
     }
+	$(selector).append($p).trigger('create');
 }
 
 //expand heading after hiding button
