@@ -81,6 +81,7 @@ getSummationId = function (data,selector) {
 	
 	$("#detailsCollapsible").collapsibleset('refresh');
 	markSidebar(detailsSpecies);
+	$("#detailsPage").find("#desktopLink").attr('href', ''+desktopURL+'&ID='+data.dbId);
 }
 
 createDetails = function (data, selector) {

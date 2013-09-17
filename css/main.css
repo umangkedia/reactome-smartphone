@@ -15,6 +15,12 @@
 	white-space: normal !important;
 }
 
+.bottomLink {
+	bottom:5px;
+	text-align:center;
+	font-size:15px;
+}
+
 .ui-title1 {
     margin-right: 30% !important;
     margin-left: 10% !important;

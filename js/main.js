@@ -1,5 +1,6 @@
 //main js file
 var schemaType = [], currentSpecies="Homo sapiens", dynamicPages= []; //to store schema type of events , to store dynamic nested pages
+var desktopURL = "http://www.reactome.org/entitylevelview/PathwayBrowser.html#DB=gk_current";
 	
 $(document).on('pageinit', '#frontPage', function () 		
 {
@@ -139,7 +140,8 @@ function createNestedPage(heading, currentPage)
 	$("#"+nextPageId).remove();
 	var newPage = $("<div data-role='page' id='"+nextPageId+"'>" +
 	"<div data-role='header' data-theme='b'> <a href='#frontPage' data-rel='back' data-icon='arrow-l' data-iconpos='notext'>Back</a>" +
-	"<h1>"+heading+"</h1></div><div data-role='content' id='pathwayList'></div></div>");
+	"<h1>"+heading+"</h1></div><div data-role='content' id='pathwayList'></div><p class='bottomLink'><a href='"+desktopURL+"' target='_blank' style='color:#AEB1B3'>Desktop Version</a></p></div>");
+
 	newPage.appendTo($.mobile.pageContainer);
 	$.mobile.changePage('#'+nextPageId);
 	return nextPageId;
