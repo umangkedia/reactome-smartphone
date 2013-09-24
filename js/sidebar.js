@@ -23,11 +23,11 @@ $(document).on('pagebeforeshow', '[data-role="page"]', function()
 });
 
 function fillSidebar(panel) {
-	createSidebar(speciesData,panel);
+	createSidebar(speciesData, panel);
 }
 
 function setSpeciesData(data,selector) {
-	speciesData=data;
+	speciesData = data;
 	createSidebar(speciesData,$.mobile.activePage.find('#sideBar'));
 }
 

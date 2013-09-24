@@ -1,4 +1,4 @@
-var redraw=false; //this is to check whether to redraw frontpage. If it is orthologous event, the front page is drawn
+var redraw = false; //this is to check whether to redraw frontpage. If it is orthologous event, the front page is drawn
 
 function checkOrthologousEvent() {
 	
@@ -12,7 +12,7 @@ function checkOrthologousEvent() {
 	}			
 }
 
-function compareEvent(data,selector) {
+function compareEvent(data, selector) {
 	var postData= "ID=" + data.dbId;
 	
 	if (data.orthologousEvent.length != 0) {		
@@ -31,7 +31,7 @@ function checkOrthologousSpecies(data, selector) {
 	for (var i in data) {
 		if (data[i].species[0].displayName.toUpperCase() === currentSpecies.toUpperCase()) {
 			flag=true;
-			getSummationId(data[i],$("#detailsContent"));
+			getSummationId(data[i], $("#detailsContent"));
 			break;
 		}
 	}

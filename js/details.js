@@ -87,7 +87,7 @@ getSummationId = function (data,selector) {
 createDetails = function (data, selector) {
 	$newText = $($.parseHTML(data.text));
 	
-	//REST api contains a dead link when the details are inferred from some species
+	//REST api contains a dead link when the details are inferred from a species
 	if (JSON.stringify(detailsData.isInferred) == "true") {
 		$newText.find('a:first').attr('href', 'http://www.reactome.org/electronic_inference_compara.html');
 	}

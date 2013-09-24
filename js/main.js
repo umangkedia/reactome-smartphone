@@ -7,7 +7,7 @@ $(document).on('pageinit', '#frontPage', function ()
 	//first call starts here, ajax on page load	
 	ajaxCaller(frontPageURLFor("homo sapiens"),jsonParser,$("#frontPage").find("#pathwayList"));
 	
-	$('body').on("vclick","li .expand",function(e) {
+	$('body').on("click","li .expand",function(e) {
 		var dbId = this.id;
 		var url = urlFordbId(dbId);
 		
@@ -17,7 +17,7 @@ $(document).on('pageinit', '#frontPage', function ()
 			var list=$('<ul data-inset="true" data-split-icon="info" data-split-theme="c">'); 
 			$("#"+newPageId).find("#pathwayList").append(list);
 			list.listview();	
-			ajaxCaller(url,nestedListCreate,list);		
+			ajaxCaller(url, createListItem, list);		
 		}
 		else createPopup();
 	});
@@ -103,8 +103,8 @@ ajaxCaller = function (url, callback, selector) {
 	});
 }
 
-//for creating nested list
-nestedListCreate = function (data, list) {
+//for creating list item on the page
+createListItem = function (data, list) {
     
     list.append('<li data-role="list-divider">' + data.displayName + '</li>');
 	
@@ -181,7 +181,7 @@ function createPopup()
 		'data-role':'popup',
         'data-transition' : "flow",
 		'data-position-to': "window",
-		'data-theme':'e',
+		'data-theme':'e', 
 		'data-overlay-theme':"a",
     }).on("popupafterclose", function() {
         $(this).remove();
@@ -196,7 +196,7 @@ function createPopup()
 }
 
 //for POST request only
-function  ajaxPOSTCaller (url,callback, selector, postData) {
+function  ajaxPOSTCaller (url, callback, selector, postData) {
 	
     $.ajax({
 		type: 'POST',
